@@ -1,5 +1,8 @@
 import numpy as np
 
+def pick_topic(nTopics):
+    return np.random.randint(nTopics)
+
 def interaction_update(oldS, oldH, speaker_potential, hearer_potential, learning_rate):
     """
     Input: opinion state of speaker and hearer, potential functions for each individual, learning rate
@@ -31,12 +34,16 @@ def interaction_update(oldS, oldH, speaker_potential, hearer_potential, learning
     return (newS, dS, newH, dH)
 
 def handle_pair( statConfigs, dynState, currentOpinionMatrix, s, h ):
-    oldS = currentOpinionMatrix[s,:]
-    oldH = currentOpinionMatrix[h,:]
+    print("==> HANDLE PAIR")
+    oldS = currentOpinionMatrix[s, :]
+    oldH = currentOpinionMatrix[h, :]
     
-    topic = pick_topic( statConfigs.ntopics )    
+    topic = pick_topic(statConfigs.ntopics)
     
-    (newS, dS, newH, dH) = interaction_update(oldS[topic], oldH[topic], speaker_func, hearer_func, statConfigs.learning_rate)
+    (newS, dS, newH, dH) = interaction_update(oldS[topic], oldH[topic], 
+                                              speaker_func, hearer_func, 
+                                              statConfigs.learning_rate)
+
     # Record all changes happening to each person, each topic, )
     wS = dynState.couplingWeights[s,topic,:]
     wH = dynState.couplingWeights[h,topic,:]
@@ -74,30 +81,17 @@ def handle_pair( statConfigs, dynState, currentOpinionMatrix, s, h ):
 
     return (currentOpinionMatrix, chgS + chgH)    
 
-###########
-###########  one_tep entails updating as many pairs of individuals as allowed.
-########### input opinionO here is 2D
-##########
-def one_step(config, game_state, opinionsO):
-    pairs = SelPoten['selector'](game_state.adj)
-    # Record all changes happening to each person, each topic, 
-    # total_change is total change happening in one single time step!
-    total_change = 0.0
-    for i in range(pairs.shape[0]):
-        (opinionsO, c) = handle_pair(config, game_state, opinionsO, pairs[i,0], pairs[i,1])
-        total_change = total_change + c
-
-    # Output opinions has to be 3D to be used by "concatenate"
-    opinions3d = np.zeros((1, np.shape(opinionsO)[0], np.shape(opinionsO)[1] ))
-    opinions3d[0,:,:] = opinionsO
-#    pdb.set_trace()
-    return (opinions3d, total_change, pairs)
-
-def one_step(config, game_state, opinionsO):
+def one_step(config, game_state, ufunc, opinionsO):
     """ one_step entails updating as many pairs of individuals as allowed.
         input opinionO here is 2D
     """
-    pairs = SelPoten['selector'](game_state.adj)
+    print("==> ONE STEP")
+
+    pairs = ufunc.selector(game_state.adj)
+
+    print("OPINIONSO: "+str(opinionsO))
+    print("PAIRS: "+str(pairs))
+
     # Record all changes happening to each person, each topic, 
     # total_change is total change happening in one single time step!
     total_change = 0.0
@@ -111,10 +105,13 @@ def one_step(config, game_state, opinionsO):
     return (opinions3d, total_change, pairs)
 
 def run_until_convergence(config, dynamicConfig, userFunction):
+    print("==> RUN_UNTIL_CONVERGENCE")
 
     # initialize history with 3D array at time =0
-    state = np.array(dynamicConfig.opinions, copy=True)
-    state = np.concatenate((state, dynamicConfig.opinionEvolution), axis=0)
+    state = np.array([dynamicConfig.opinions], copy=True)
+    state = np.concatenate((state, [dynamicConfig.opinions]), axis=0)
+
+    print("STATE= "+str(state))
 
     # initiate matrix of changes with infinity at t=0 for stopping purposes.
     # This is a matrix whose rows are people and each column corresponds to a topic.
@@ -132,7 +129,7 @@ def run_until_convergence(config, dynamicConfig, userFunction):
     
     while TerminationSignal:
         # the input in the next line is 2D.
-        (outOpinions, chg, all_pairs) = one_step(config, dynamicConfig, state[-1])
+        (outOpinions, chg, all_pairs) = one_step(config, dynamicConfig, userFunction, state[-1])
         state = np.concatenate((state, outOpinions), axis = 0)
         itrCount = itrCount + 1
         
