@@ -17,10 +17,13 @@ class WorldState:
         self.history = hist
 
     def appendToHistory(self, newOpinions):
-        self.history = np.concatenate((self.history, newOpinions), axis=0)
+        self.history = np.concatenate((self.history, [newOpinions]), axis=0)
 
     def reset(self):
         self.history = None
+
+    def currentOpinions(self):
+        return self.history[-1]
 
     def validate(self):
         # validation of data sizes
