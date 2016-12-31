@@ -22,15 +22,15 @@ def consensusStopPolarizationStop(currentOpinion, staticConfigurationStuff):
         consensusSignal = False
     stopSignal = (polarSignal or consensusSignal)
     return stopSignal
-##
-##  This functions is stopping tool by looking at total 
-##  change that all people have made during the last step of the game.
-##
-def totalChangeStop(change, staticConfiguration ):
-    stopSignal = True
-    if change < staticConfiguration.threshold:
-        stopSignal = False
-    return stopSignal
+
+def totalChangeStop(config, state, change, iterationNo):
+    """
+    Stop if the total change has dropped below some threshold.
+    """
+    if np.sum(change) < config.threshold:
+        return True
+    else:
+        return False
 
 ##
 ## Window Stop Function here:
@@ -62,6 +62,11 @@ def iterationStop(config, state, change, iterationNo):
         return True
 
 def individualsChange(config, state, change, iterationNo):
+    """
+    Stop if all individuals have changed less than some given
+    threshold value.
+    """
+    
     # TODO: rename Kthreshold to a more meaningful name
     if np.all(change < config.Kthreshold):
         return False
