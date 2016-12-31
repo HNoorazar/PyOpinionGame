@@ -1,5 +1,5 @@
 """
-Potential function derivative definitions.  
+Potential function derivative definitions.
 
 In this code potentials are defined as closures.
 This allows one to instantate a parameterized potential once and pass around the
@@ -44,7 +44,8 @@ def flatTopTent(flatRegion, leftSlope, rightSlope):
 def gaussian(x):
     mean = .5
     z = (2 * pi)**(.5)
-    if x >= 0 and x<=1:
-        return ((mean - x)/z) * exp(-(x - mean)**2/2.0 )
+    if x >= 0 and x <= 1:
+        return ((mean - x)/z) * exp(-(x - mean)**2/2.0)
     else:
         return 0.0
+        
