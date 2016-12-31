@@ -59,6 +59,10 @@ else:
 state = og_state.WorldState(adj, weights, initialOpinions)
 state.validate()
 
+#
+# set popsize and ntopics based on current state.  warn if config 
+# disagrees with loaded files.
+#
 wPopsize = np.shape(weights)[0]
 wNtopics = np.shape(weights)[1]
 
@@ -77,5 +81,21 @@ ufuncs = og_cfg.UserFunctions(og_select.FastPairSelection,
                               og_stop.iterationStop,
                               og_pot.createTent(0.5, 2.0, -2.0))
 
-state = og_core.run_until_convergence(config, state, ufuncs)
+#
+# run
+#
+polarized = 0
+notPolarized = 0
 
+for i in range(1000):
+    state = og_core.run_until_convergence(config, state, ufuncs)
+    results = og_opinions.isPolarized(state.history[-1], 0.05)
+    for result in results:
+        if result:
+            polarized += 1
+        else:
+            notPolarized += 1
+    state.reset()
+    state.initialOpinions = og_opinions.initialize_opinions(config.popSize, config.ntopics)
+
+print((polarized, notPolarized))

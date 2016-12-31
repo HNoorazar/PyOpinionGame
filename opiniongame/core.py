@@ -107,8 +107,6 @@ def one_step(config, state, ufunc):
     return (curOpinions, total_change, pairs)
 
 def run_until_convergence(config, state, ufunc):
-    print("==> RUN_UNTIL_CONVERGENCE")
-
     # initialize history with 3D array at time =0
     state.initializeHistory()
 
