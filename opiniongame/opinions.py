@@ -1,7 +1,9 @@
 import numpy as np
 
-#   
-#   initialize opinions
-#   1 is added there to use contacenate thing later!!!   
-def initialize_opinions( pop_size, ntopics ):
+def initialize_opinions(pop_size, ntopics):
+    """
+    Given a population size and topic count, generate a set of random
+    opinions.  Assumes each topic space is the scalars over [0,1].
+    """
     return np.random.rand(pop_size, ntopics)
+    
