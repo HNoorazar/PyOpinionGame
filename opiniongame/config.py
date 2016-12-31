@@ -93,5 +93,3 @@ class staticParameters:
         self.no_of_experiments = config.getint('parameters', 'no_of_experiments')
         self.startingseed = config.getint('parameters', 'startingseed')
         self.iterationMax = config.getint('parameters', 'iterationMax')
-
-    

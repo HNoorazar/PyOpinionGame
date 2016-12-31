@@ -5,33 +5,35 @@ Object containing dynamic simulation state.
 import numpy as np
 
 class WorldState:
-    def __init__(self, adj, couplingWeights,
-                 opinions):
+    def __init__(self, adj, couplingWeights, initialOpinions):
         self.adj = adj
         self.couplingWeights = couplingWeights
-        self.opinions = opinions
+        self.initialOpinions = initialOpinions
         self.history = None
 
     def initializeHistory(self):
-        hist = np.array([self.opinions], copy=True)
-        hist = np.concatenate((hist, [self.opinions]), axis=0)
+        hist = np.array([self.initialOpinions], copy=True)
+        hist = np.concatenate((hist, [self.initialOpinions]), axis=0)
         self.history = hist
 
     def appendToHistory(self, newOpinions):
         self.history = np.concatenate((self.history, newOpinions), axis=0)
 
+    def reset(self):
+        self.history = None
+
     def validate(self):
         # validation of data sizes
         print("WEIGHT SHAPE   : "+str(np.shape(self.couplingWeights)))
-        print("OPINION SHAPE  : "+str(np.shape(self.opinions)))
+        print("OPINION SHAPE  : "+str(np.shape(self.initialOpinions)))
         print("ADJACENCY SHAPE: "+str(np.shape(self.adj)))
 
         wPopsize = np.shape(self.couplingWeights)[0]
         wNtopics1 = np.shape(self.couplingWeights)[1]
         wNtopics2 = np.shape(self.couplingWeights)[2]
 
-        oPopsize = np.shape(self.opinions)[0]
-        oNtopics = np.shape(self.opinions)[1]
+        oPopsize = np.shape(self.initialOpinions)[0]
+        oNtopics = np.shape(self.initialOpinions)[1]
 
         aPopsize1 = np.shape(self.adj)[0]
         aPopsize2 = np.shape(self.adj)[1]

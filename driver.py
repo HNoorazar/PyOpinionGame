@@ -38,7 +38,7 @@ np.random.seed(config.startingseed)
 # check optional arguments and generate defaults if missing
 #
 weights = None
-opinions = None
+initialOpinions = None
 adj = None
 
 if cmdline.args.weights is not None:
@@ -47,16 +47,16 @@ else:
     weights = og_coupling.weights_no_coupling(config.popSize, config.ntopics)
 
 if cmdline.args.initialOpinions is not None:
-    opinions = og_io.loadNamedMatrix(cmdline.args.initialOpinions, 'initialOpinions')
+    initialOpinions = og_io.loadNamedMatrix(cmdline.args.initialOpinions, 'initialOpinions')
 else:
-    opinions = og_opinions.initialize_opinions(config.popSize, config.ntopics)
+    initialOpinions = og_opinions.initialize_opinions(config.popSize, config.ntopics)
 
 if cmdline.args.adjacency is not None:
     adj = og_io.loadNamedMatrix(cmdline.args.adjacency, 'adjacency')
 else:
     adj = og_adj.make_adj(config.popSize, 'full')
 
-state = og_state.WorldState(adj, weights, opinions)
+state = og_state.WorldState(adj, weights, initialOpinions)
 state.validate()
 
 wPopsize = np.shape(weights)[0]
