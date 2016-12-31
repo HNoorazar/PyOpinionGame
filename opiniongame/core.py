@@ -106,59 +106,32 @@ def one_step(config, game_state, ufunc, opinionsO):
     opinions3d[0,:,:] = opinionsO
     return (opinions3d, total_change, pairs)
 
-def run_until_convergence(config, dynamicConfig, ufunc):
+
+
+def run_until_convergence(config, state, ufunc):
     print("==> RUN_UNTIL_CONVERGENCE")
 
     # initialize history with 3D array at time =0
-    state = np.array([dynamicConfig.opinions], copy=True)
-    state = np.concatenate((state, [dynamicConfig.opinions]), axis=0)
+    hist = np.array([state.opinions], copy=True)
+    hist = np.concatenate((hist, [state.opinions]), axis=0)
+    state.history = hist
 
-    # initiate matrix of changes with infinity at t=0 for stopping purposes.
-    # This is a matrix whose rows are people and each column corresponds to a topic.
-    K2_all_changes = 10 * np.ones((config.popSize, config.ntopics))
+    iterCount = 0
 
-    convolutionGoVector = np.ones((config.popSize, 1))
-    diffVector = np.ones((config.popSize, 1))
+    terminationSignal = True
 
-    TerminationSignal = True
-    itrCount = 0
-    window_length = 20
-    control_length = 30
-    Kevins_matrix =  100 * np.ones(( config.popSize,  control_length, config.ntopics))
-    Kevins_collapsed_matrix = np.ones(( config.popSize, config.ntopics ))
-    
-    while TerminationSignal:
-        # the input in the next line is 2D.
-        (outOpinions, chg, all_pairs) = one_step(config, dynamicConfig, ufunc, state[-1])
-        state = np.concatenate((state, outOpinions), axis = 0)
-        itrCount = itrCount + 1
-        
-        if ufunc.stop == 'windowStop' :
-            TerminationSignal = og_stop.windowStop( itrCount, window_length, control_length,
-                                      state, Kevins_matrix, Kevins_collapsed_matrix )
-        elif ufunc.stop == 'iterationStop':
-            TerminationSignal = og_stop.iterationStop (config.iterationMax, itrCount)
-            
-        elif ufunc.stop == 'totalChangeStop': 
-            TerminationSignal = og_stop.totalChangeStop(chg, config)
-            
-        elif ufunc.stop == 'averageChange':
-            TerminationSignal = og_stop.averageChange(state, config, K2_all_changes)
-            
-        elif ufunc.stop == 'norm_stop':
-            TerminationSignal = og_stop.norm_stop(state)
-            
-        elif ufunc.stop == 'diff_stop' :
-            TerminationSignal = og_stop.diff_stop(state, config, diffVector)
-            
-        elif ufunc.stop == 'conv_stop' :
-            TerminationSignal = og_stop.conv_stop(itrCount, state, config, convolutionGoVector)
-            
-        elif ufunc.stop ==  'HosseinStop':
-            TerminationSignal = og_stop.HosseinStop(itrCount, state, config )
-                
-        elif ufunc.stop == 'consensusStopPolarizationStop' :
-            TerminationSignal = og_stop.consensusStopPolarizationStop( outOpinions, config )
-            
-    state = np.delete(state,-1, axis = 0)
+    while terminationSignal:
+        # take one step to produce the new set of opinions, change observed during the
+        # step and pairs that interacted.
+        (newOpinions, change, all_pairs) = one_step(config, state, ufunc, state.history[-1])
+
+        print(str(change))
+
+        state.history = np.concatenate((state.history, newOpinions), axis=0)
+        iterCount += 1
+
+        terminationSignal = ufunc.stop(config, state, change, iterCount)
+
+    state.history = np.delete(state.history, -1, axis=0)
+
     return state

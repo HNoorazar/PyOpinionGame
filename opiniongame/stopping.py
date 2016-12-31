@@ -51,28 +51,22 @@ def windowStop( iterationCount, windowLength, controlLength,
             stopSignal = False
     return stopSignal   
 
-##
-##  Iteration count stop function, would terminate the process if 
-##  a certain number of steps is taken.
-##
-def iterationStop( iterationMax, iterationNo):
-#    iterationMax = 300
-    stopSignal = True
-    if iterationNo >= iterationMax:
-      stopSignal = False
-    return stopSignal
+def iterationStop(config, state, change, iterationNo):
+    """
+    Iteration count stop function, would terminate the process if
+    a certain number of steps is taken.
+    """
+    if iterationNo >= config.iterationMax:
+        return False
+    else:
+        return True
 
-##
-##  The following function terminates the game, 
-##  if each individual's change is less than a threshold.
-##  ctState is current state.
-##
-def individualsChange(ctState, staticConfigur):
-    stopSignal = True
-    K2_all_changes = np.abs(ctState[-1] - ctState[-3])                    
-    if  np.all(K2_all_changes < staticConfigur.Kthreshold):
-        stopSignal = False
-    return stopSignal
+def individualsChange(config, state, change, iterationNo):
+    # TODO: rename Kthreshold to a more meaningful name
+    if np.all(change < config.Kthreshold):
+        return False
+    else:
+        return True
     
 ##
 ##  The following function terminates the game, 
@@ -136,26 +130,3 @@ def diff_stop(Histry, configuration, diffVec):
                 stopSignal = False          
     return stopSignal
 
-##
-##  This function takes the whole history and computes the convolution
-##  just for open minded nodes who have high potential of oscillation.
-##  It is assumed that these nodes are the top 1/3.            
-##  This would really work on the case in which there is only one topic! if it works!
-##  timesteps is itrcount
-def conv_stop(timesteps, hist, conf, conVec):
-    stopSignal = True
-    if timesteps > 53:
-        convolutionOnes = np.ones((30,1)) / 30
-#        M = np.zeros((conf.popSize , conf.ntopics))       
-        for nt in range(conf.ntopics):
-            for pp in range(conf.popSize):
-#                convolutionVector = np.convolve(hist[0:-1,pp , nt].ravel(), convolutionOnes.ravel())
-#                convDiff = np.max(convolutionVector[-50:-1]) - np.min(convolutionVector[-50:-1])
-                convolutionVector = np.convolve(hist[-50:-1,pp , nt].ravel(), convolutionOnes.ravel(), 'valid')
-                convDiff = np.max(convolutionVector) - np.min(convolutionVector)
-#                M[pp,nt] = convDiff
-                if convDiff < .01:
-                    conVec[pp] = 0
-    if np.all(conVec == False):
-        stopSignal = False
-    return stopSignal     

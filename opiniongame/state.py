@@ -1,12 +1,13 @@
 # object containing simulation state
 import numpy as np
 
-class worldStateClass:
+class WorldState:
     def __init__(self, adj, couplingWeights,
                  opinions):
         self.adj = adj
         self.couplingWeights = couplingWeights
         self.opinions = opinions
+        self.history = None
 
     def validate(self):
         # validation of data sizes

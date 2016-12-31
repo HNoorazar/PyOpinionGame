@@ -56,7 +56,7 @@ if cmdline.args.adjacency is not None:
 else:
     adj = og_adj.make_adj(config.popSize, 'full')
 
-state = og_state.worldStateClass(adj,weights,opinions)
+state = og_state.WorldState(adj, weights, opinions)
 state.validate()
 
 wPopsize = np.shape(weights)[0]
@@ -74,9 +74,9 @@ if wNtopics != config.ntopics:
 # functions for use by the simulation engine
 #
 ufuncs = og_cfg.UserFunctions(og_select.FastPairSelection,
-                              'iterationStop',
+                              og_stop.iterationStop,
                               og_pot.createTent(0.5, 2.0, -2.0))
 
 state = og_core.run_until_convergence(config, state, ufuncs)
 
-print("FINAL STATE=>"+str(state))
+print("FINAL STATE=>"+str(state.history))
