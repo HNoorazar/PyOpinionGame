@@ -75,15 +75,15 @@ def handle_pair(config, state, ufunc, opinions, s, h):
             newval = 1
         elif newval < 0:
             newval = 0
-        chgS = chgS + np.abs(opinions[s,i] - newval)
-        opinions[s,i] = newval
+        chgS = chgS + np.abs(opinions[s, i] - newval)
+        opinions[s, i] = newval
         newval = oldH[i] + dH * wH[i]
         if newval > 1:
             newval = 1
         elif newval < 0:
             newval = 0
-        opinions[h,i] = newval
-        chgH = chgH + np.abs(opinions[h,i] - newval)
+        opinions[h, i] = newval
+        chgH = chgH + np.abs(opinions[h, i] - newval)
 ##################################################################        
 
     return (opinions, chgS + chgH)

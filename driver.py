@@ -79,4 +79,3 @@ ufuncs = og_cfg.UserFunctions(og_select.FastPairSelection,
 
 state = og_core.run_until_convergence(config, state, ufuncs)
 
-print("FINAL STATE=>"+str(state.history))
