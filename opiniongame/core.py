@@ -2,6 +2,9 @@ import numpy as np
 import opiniongame.stopping as og_stop
 
 def pick_topic(nTopics):
+    """
+    Pick a topic from n possible topics.  Just a wrapper around NumPy randint.
+    """
     return np.random.randint(nTopics)
 
 def interaction_update(oldS, oldH, speaker_potential, hearer_potential, learning_rate):
