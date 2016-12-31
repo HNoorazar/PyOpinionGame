@@ -106,18 +106,13 @@ def one_step(config, game_state, ufunc, opinionsO):
     opinions3d[0,:,:] = opinionsO
     return (opinions3d, total_change, pairs)
 
-
-
 def run_until_convergence(config, state, ufunc):
     print("==> RUN_UNTIL_CONVERGENCE")
 
     # initialize history with 3D array at time =0
-    hist = np.array([state.opinions], copy=True)
-    hist = np.concatenate((hist, [state.opinions]), axis=0)
-    state.history = hist
+    state.initializeHistory()
 
     iterCount = 0
-
     terminate = False
 
     while not terminate:
@@ -125,13 +120,12 @@ def run_until_convergence(config, state, ufunc):
         # step and pairs that interacted.
         (newOpinions, change, all_pairs) = one_step(config, state, ufunc, state.history[-1])
 
-        print(str(change))
-
-        state.history = np.concatenate((state.history, newOpinions), axis=0)
+        state.appendToHistory(newOpinions)
         iterCount += 1
 
         terminate = ufunc.stop(config, state, change, iterCount)
 
     state.history = np.delete(state.history, -1, axis=0)
 
+    # TODO: return iteration count too?
     return state

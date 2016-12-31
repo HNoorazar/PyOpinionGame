@@ -1,4 +1,7 @@
-# object containing simulation state
+"""
+Object containing dynamic simulation state.
+"""
+
 import numpy as np
 
 class WorldState:
@@ -8,6 +11,14 @@ class WorldState:
         self.couplingWeights = couplingWeights
         self.opinions = opinions
         self.history = None
+
+    def initializeHistory(self):
+        hist = np.array([self.opinions], copy=True)
+        hist = np.concatenate((hist, [self.opinions]), axis=0)
+        self.history = hist
+
+    def appendToHistory(self, newOpinions):
+        self.history = np.concatenate((self.history, newOpinions), axis=0)
 
     def validate(self):
         # validation of data sizes
