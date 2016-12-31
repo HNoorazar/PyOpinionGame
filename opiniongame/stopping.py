@@ -1,27 +1,10 @@
-# functions used for calculating stopping criteria
+""" Functions used for calculating stopping criteria.
+
+A stopping function will return True if it is time to stop,
+False otherwise.
+"""
 
 import numpy as np
-
-######################                     ###################
-######################  Stopping Functions ###################
-######################                     ###################
-##
-##  Polarization stop. 
-##  This function looks at the population. If sum of number of people 
-##  whose opinions are more than .95 and less than .05 is the same as 
-##  population, then it would send an stopping signal out!
-##
-def consensusStopPolarizationStop(currentOpinion, staticConfigurationStuff):
-    stopSignal = True
-    polar_vector = np.squeeze(currentOpinion)
-    polar_vector = list(polar_vector)
-    if (sum(i >= .95 for i in polar_vector) + sum(i <= .05 for i in polar_vector)) == staticConfigurationStuff.popSize:
-        polarSignal = False
-    
-    if np.max(currentOpinion) - np.min(currentOpinion) < .03:
-        consensusSignal = False
-    stopSignal = (polarSignal or consensusSignal)
-    return stopSignal
 
 def totalChangeStop(config, state, change, iterationNo):
     """
@@ -32,61 +15,39 @@ def totalChangeStop(config, state, change, iterationNo):
     else:
         return False
 
-##
-## Window Stop Function here:
-##
-def windowStop( iterationCount, windowLength, controlLength,
-                stateEvol, KevinsMatrix, KevinsCollapsedMatrix  ):
-    stopSignal = True
-    if iterationCount >= ( windowLength - 1):
-        K_count = (iterationCount + 1) % controlLength
-        KevinsMatrix [ :, K_count, :] = ( stateEvol[iterationCount + 1 - windowLength : iterationCount + 1, : ,:].max( axis = 0) -
-                                          stateEvol[iterationCount + 1 - windowLength : iterationCount + 1, : ,:].min( axis = 0) )
-                                           
-        whatever_Matrix =  KevinsMatrix.max(axis = 1) - KevinsMatrix.min(axis = 1)
-        find_indexes = np.where(whatever_Matrix < 0.01)
-        find_ind_array = np.asarray(find_indexes)
-        KevinsCollapsedMatrix[find_ind_array[0], find_ind_array[1]] = 0 
-        if np.all(KevinsCollapsedMatrix == False):
-            stopSignal = False
-    return stopSignal   
-
 def iterationStop(config, state, change, iterationNo):
     """
     Iteration count stop function, would terminate the process if
     a certain number of steps is taken.
     """
     if iterationNo >= config.iterationMax:
-        return False
-    else:
         return True
+    else:
+        return False
 
-def individualsChange(config, state, change, iterationNo):
+def allChangeStop(config, state, change, iterationNo):
     """
     Stop if all individuals have changed less than some given
     threshold value.
     """
-    
+
     # TODO: rename Kthreshold to a more meaningful name
     if np.all(change < config.Kthreshold):
-        return False
-    else:
         return True
-    
-##
-##  The following function terminates the game, 
-##  if each the average change in the last time step
-##  is less than a threshold.
-##  ctState is current state.
-##
+    else:
+        return False
 
-def averageChange(ctState, constConfiguration):
-    stopSignal = True
-    K2_all_changes = np.abs(ctState[-1] - ctState[-3]) 
-    if (np.sum(K2_all_changes )/constConfiguration.popSize) < (constConfiguration.threshold):
-        stopSignal = False
-    return stopSignal
+def averageChangeStop(config, state, change, iterationNo):
+    """
+    Stop if the average change has dropped below a given threshold.
+    """
+    if (np.sum(change)/config.popSize) < config.threshold:
+        return True
+    else:
+        return False
 
+###########################################################################
+# junk below here
 
 ##
 ##  This function compares the changes made in the last time step,
@@ -134,4 +95,41 @@ def diff_stop(Histry, configuration, diffVec):
         if np.all(diffVec == False):
                 stopSignal = False          
     return stopSignal
+
+##
+##  Polarization stop. 
+##  This function looks at the population. If sum of number of people 
+##  whose opinions are more than .95 and less than .05 is the same as 
+##  population, then it would send an stopping signal out!
+##
+def consensusStopPolarizationStop(currentOpinion, staticConfigurationStuff):
+    stopSignal = True
+    polar_vector = np.squeeze(currentOpinion)
+    polar_vector = list(polar_vector)
+    if (sum(i >= .95 for i in polar_vector) + sum(i <= .05 for i in polar_vector)) == staticConfigurationStuff.popSize:
+        polarSignal = False
+    
+    if np.max(currentOpinion) - np.min(currentOpinion) < .03:
+        consensusSignal = False
+    stopSignal = (polarSignal or consensusSignal)
+    return stopSignal
+
+##
+## Window Stop Function here:
+##
+def windowStop( iterationCount, windowLength, controlLength,
+                stateEvol, KevinsMatrix, KevinsCollapsedMatrix  ):
+    stopSignal = True
+    if iterationCount >= ( windowLength - 1):
+        K_count = (iterationCount + 1) % controlLength
+        KevinsMatrix [ :, K_count, :] = ( stateEvol[iterationCount + 1 - windowLength : iterationCount + 1, : ,:].max( axis = 0) -
+                                          stateEvol[iterationCount + 1 - windowLength : iterationCount + 1, : ,:].min( axis = 0) )
+                                           
+        whatever_Matrix =  KevinsMatrix.max(axis = 1) - KevinsMatrix.min(axis = 1)
+        find_indexes = np.where(whatever_Matrix < 0.01)
+        find_ind_array = np.asarray(find_indexes)
+        KevinsCollapsedMatrix[find_ind_array[0], find_ind_array[1]] = 0 
+        if np.all(KevinsCollapsedMatrix == False):
+            stopSignal = False
+    return stopSignal   
 

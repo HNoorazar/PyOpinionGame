@@ -118,9 +118,9 @@ def run_until_convergence(config, state, ufunc):
 
     iterCount = 0
 
-    terminationSignal = True
+    terminate = False
 
-    while terminationSignal:
+    while not terminate:
         # take one step to produce the new set of opinions, change observed during the
         # step and pairs that interacted.
         (newOpinions, change, all_pairs) = one_step(config, state, ufunc, state.history[-1])
@@ -130,7 +130,7 @@ def run_until_convergence(config, state, ufunc):
         state.history = np.concatenate((state.history, newOpinions), axis=0)
         iterCount += 1
 
-        terminationSignal = ufunc.stop(config, state, change, iterCount)
+        terminate = ufunc.stop(config, state, change, iterCount)
 
     state.history = np.delete(state.history, -1, axis=0)
 
