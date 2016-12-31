@@ -35,7 +35,6 @@ def interaction_update(oldS, oldH, speaker_potential, hearer_potential, learning
     return (newS, dS, newH, dH)
 
 def handle_pair(statConfigs, dynState, ufunc, currentOpinionMatrix, s, h):
-    print("==> HANDLE PAIR")
     oldS = currentOpinionMatrix[s, :]
     oldH = currentOpinionMatrix[h, :]
 
@@ -90,12 +89,7 @@ def one_step(config, game_state, ufunc, opinionsO):
     """ one_step entails updating as many pairs of individuals as allowed.
         input opinionO here is 2D
     """
-    print("==> ONE STEP")
-
     pairs = ufunc.selector(game_state.adj)
-
-    print("OPINIONSO: "+str(opinionsO))
-    print("PAIRS: "+str(pairs))
 
     # Record all changes happening to each person, each topic, 
     # total_change is total change happening in one single time step!
@@ -115,8 +109,6 @@ def run_until_convergence(config, dynamicConfig, ufunc):
     # initialize history with 3D array at time =0
     state = np.array([dynamicConfig.opinions], copy=True)
     state = np.concatenate((state, [dynamicConfig.opinions]), axis=0)
-
-    print("STATE= "+str(state))
 
     # initiate matrix of changes with infinity at t=0 for stopping purposes.
     # This is a matrix whose rows are people and each column corresponds to a topic.

@@ -38,7 +38,7 @@ class staticParameters:
         """
         Create static parameter object with default parameters.
         """
-        self.learning_rate = .3
+        self.learning_rate = .1
         self.no_of_experiments = 100
         self.popSize = 20
         self.threshold = .000001
