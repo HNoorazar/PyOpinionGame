@@ -1,4 +1,5 @@
 import numpy as np
+import opiniongame.stopping as og_stop
 
 def pick_topic(nTopics):
     return np.random.randint(nTopics)
@@ -33,20 +34,24 @@ def interaction_update(oldS, oldH, speaker_potential, hearer_potential, learning
 
     return (newS, dS, newH, dH)
 
-def handle_pair( statConfigs, dynState, currentOpinionMatrix, s, h ):
+def handle_pair(statConfigs, dynState, ufunc, currentOpinionMatrix, s, h):
     print("==> HANDLE PAIR")
     oldS = currentOpinionMatrix[s, :]
     oldH = currentOpinionMatrix[h, :]
-    
+
     topic = pick_topic(statConfigs.ntopics)
-    
-    (newS, dS, newH, dH) = interaction_update(oldS[topic], oldH[topic], 
-                                              speaker_func, hearer_func, 
+
+    # TODO: fix this to support a family of potentials per individual
+    speaker_func = ufunc.dPotential
+    hearer_func = ufunc.dPotential
+
+    (newS, dS, newH, dH) = interaction_update(oldS[topic], oldH[topic],
+                                              speaker_func, hearer_func,
                                               statConfigs.learning_rate)
 
     # Record all changes happening to each person, each topic, )
-    wS = dynState.couplingWeights[s,topic,:]
-    wH = dynState.couplingWeights[h,topic,:]
+    wS = dynState.couplingWeights[s, topic, :]
+    wH = dynState.couplingWeights[h, topic, :]
     chgS = 0.0
     chgH = 0.0
     
@@ -96,7 +101,7 @@ def one_step(config, game_state, ufunc, opinionsO):
     # total_change is total change happening in one single time step!
     total_change = 0.0
     for i in range(pairs.shape[0]):
-        (opinionsO, c) = handle_pair(config, game_state, opinionsO, pairs[i,0], pairs[i,1])
+        (opinionsO, c) = handle_pair(config, game_state, ufunc, opinionsO, pairs[i,0], pairs[i,1])
         total_change = total_change + c
 
     # Output opinions has to be 3D to be used by "concatenate"
@@ -104,7 +109,7 @@ def one_step(config, game_state, ufunc, opinionsO):
     opinions3d[0,:,:] = opinionsO
     return (opinions3d, total_change, pairs)
 
-def run_until_convergence(config, dynamicConfig, userFunction):
+def run_until_convergence(config, dynamicConfig, ufunc):
     print("==> RUN_UNTIL_CONVERGENCE")
 
     # initialize history with 3D array at time =0
@@ -129,36 +134,36 @@ def run_until_convergence(config, dynamicConfig, userFunction):
     
     while TerminationSignal:
         # the input in the next line is 2D.
-        (outOpinions, chg, all_pairs) = one_step(config, dynamicConfig, userFunction, state[-1])
+        (outOpinions, chg, all_pairs) = one_step(config, dynamicConfig, ufunc, state[-1])
         state = np.concatenate((state, outOpinions), axis = 0)
         itrCount = itrCount + 1
         
-        if SelPoten['stop'] == 'windowStop' :
-            TerminationSignal = windowStop( itrCount, window_length, control_length,
+        if ufunc.stop == 'windowStop' :
+            TerminationSignal = og_stop.windowStop( itrCount, window_length, control_length,
                                       state, Kevins_matrix, Kevins_collapsed_matrix )
-        elif SelPoten['stop'] == 'iterationStop':
-            TerminationSignal = iterationStop (staticConfiguration.iterationMax, itrCount)
+        elif ufunc.stop == 'iterationStop':
+            TerminationSignal = og_stop.iterationStop (config.iterationMax, itrCount)
             
-        elif SelPoten['stop'] == 'totalChangeStop': 
-            TerminationSignal = totalChangeStop(chg, staticConfiguration)
+        elif ufunc.stop == 'totalChangeStop': 
+            TerminationSignal = og_stop.totalChangeStop(chg, config)
             
-        elif SelPoten['stop'] == 'averageChange':
-            TerminationSignal = averageChange(state, staticConfiguration, K2_all_changes)
+        elif ufunc.stop == 'averageChange':
+            TerminationSignal = og_stop.averageChange(state, config, K2_all_changes)
             
-        elif SelPoten['stop'] == 'norm_stop':
-            TerminationSignal = norm_stop(state)
+        elif ufunc.stop == 'norm_stop':
+            TerminationSignal = og_stop.norm_stop(state)
             
-        elif SelPoten['stop'] == 'diff_stop' :
-            TerminationSignal = diff_stop(state, staticConfiguration, diffVector)
+        elif ufunc.stop == 'diff_stop' :
+            TerminationSignal = og_stop.diff_stop(state, config, diffVector)
             
-        elif SelPoten['stop'] == 'conv_stop' :
-            TerminationSignal = conv_stop(itrCount, state, staticConfiguration, convolutionGoVector)
+        elif ufunc.stop == 'conv_stop' :
+            TerminationSignal = og_stop.conv_stop(itrCount, state, config, convolutionGoVector)
             
-        elif SelPoten['stop'] ==  'HosseinStop':
-            TerminationSignal = HosseinStop(itrCount, state, staticConfiguration )
+        elif ufunc.stop ==  'HosseinStop':
+            TerminationSignal = og_stop.HosseinStop(itrCount, state, config )
                 
-        elif SelPoten['stop'] == 'consensusStopPolarizationStop' :
-            TerminationSignal = consensusStopPolarizationStop( outOpinions, staticConfiguration )
+        elif ufunc.stop == 'consensusStopPolarizationStop' :
+            TerminationSignal = og_stop.consensusStopPolarizationStop( outOpinions, config )
             
     state = np.delete(state,-1, axis = 0)
     return state

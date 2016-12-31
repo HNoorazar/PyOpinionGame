@@ -74,8 +74,9 @@ if wNtopics != config.ntopics:
 # functions for use by the simulation engine
 #
 ufuncs = og_cfg.UserFunctions(og_select.FastPairSelection,
-                              og_stop.iterationStop,
+                              'iterationStop',
                               og_pot.createTent(0.5, 2.0, -2.0))
 
-og_core.run_until_convergence(config, state, ufuncs)
+state = og_core.run_until_convergence(config, state, ufuncs)
 
+print("FINAL STATE=>"+str(state))
