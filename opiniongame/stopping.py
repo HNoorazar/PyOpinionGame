@@ -10,7 +10,7 @@ def totalChangeStop(config, state, change, iterationNo):
     """
     Stop if the total change has dropped below some threshold.
     """
-    if np.sum(change) < config.threshold:
+    if np.sum(np.abs(change)) < config.threshold:
         return True
     else:
         return False
@@ -32,7 +32,7 @@ def allChangeStop(config, state, change, iterationNo):
     """
 
     # TODO: rename Kthreshold to a more meaningful name
-    if np.all(change < config.Kthreshold):
+    if np.all(np.abs(change) < config.Kthreshold):
         return True
     else:
         return False
@@ -41,7 +41,7 @@ def averageChangeStop(config, state, change, iterationNo):
     """
     Stop if the average change has dropped below a given threshold.
     """
-    if (np.sum(change)/config.popSize) < config.threshold:
+    if (np.sum(np.abs(change))/config.popSize) < config.threshold:
         return True
     else:
         return False
