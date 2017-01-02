@@ -26,7 +26,6 @@ def createTent(center):
             return 0
     return tent
 
-
 def flatPotential(x):
     return 0.0
 

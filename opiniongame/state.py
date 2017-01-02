@@ -2,6 +2,10 @@
 Object containing dynamic simulation state.
 """
 
+import opiniongame.IO as og_io
+import opiniongame.coupling as og_coupling
+import opiniongame.opinions as og_opinions
+import opiniongame.adjacency as og_adj
 import numpy as np
 
 class WorldState:
@@ -10,6 +14,51 @@ class WorldState:
         self.couplingWeights = couplingWeights
         self.initialOpinions = initialOpinions
         self.history = None
+
+    @classmethod
+    def fromCmdlineArguments(cls, cmdline, config):
+        #
+        # check optional arguments and generate defaults if missing
+        #
+        weights = None
+        initialOpinions = None
+        adj = None
+
+        if cmdline.args.weights is not None:
+            weights = og_io.loadNamedMatrix(cmdline.args.weights, 'weights')
+        else:
+            weights = og_coupling.weights_no_coupling(config.popSize, config.ntopics)
+
+        if cmdline.args.initialOpinions is not None:
+            initialOpinions = og_io.loadNamedMatrix(cmdline.args.initialOpinions, 'initialOpinions')
+        else:
+            initialOpinions = og_opinions.initialize_opinions(config.popSize, config.ntopics)
+
+        if cmdline.args.adjacency is not None:
+            adj = og_io.loadNamedMatrix(cmdline.args.adjacency, 'adjacency')
+        else:
+            adj = og_adj.make_adj(config.popSize, 'full')
+        
+        state = cls(adj, weights, initialOpinions)
+        state.validate()
+
+        #
+        # set popsize and ntopics based on current state.  warn if config 
+        # disagrees with loaded files.
+        #
+        wPopsize = np.shape(weights)[0]
+        wNtopics = np.shape(weights)[1]
+
+        if wPopsize != config.popSize:
+            print("WARNING: popsize from data files disagrees with cfg.")
+            config.popSize = wPopsize
+
+        if wNtopics != config.ntopics:
+            print("WARNING: ntopics from data files disagrees with cfg.")
+            config.ntopics = wNtopics
+
+        return state
+
 
     def initializeHistory(self):
         hist = np.array([self.initialOpinions], copy=True)

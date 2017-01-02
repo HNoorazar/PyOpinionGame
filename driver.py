@@ -34,52 +34,14 @@ config.printOut()
 print("SEEDING PRNG: "+str(config.startingseed))
 np.random.seed(config.startingseed)
 
-#
-# check optional arguments and generate defaults if missing
-#
-weights = None
-initialOpinions = None
-adj = None
-
-if cmdline.args.weights is not None:
-    weights = og_io.loadNamedMatrix(cmdline.args.weights, 'weights')
-else:
-    weights = og_coupling.weights_no_coupling(config.popSize, config.ntopics)
-
-if cmdline.args.initialOpinions is not None:
-    initialOpinions = og_io.loadNamedMatrix(cmdline.args.initialOpinions, 'initialOpinions')
-else:
-    initialOpinions = og_opinions.initialize_opinions(config.popSize, config.ntopics)
-
-if cmdline.args.adjacency is not None:
-    adj = og_io.loadNamedMatrix(cmdline.args.adjacency, 'adjacency')
-else:
-    adj = og_adj.make_adj(config.popSize, 'full')
-
-state = og_state.WorldState(adj, weights, initialOpinions)
-state.validate()
-
-#
-# set popsize and ntopics based on current state.  warn if config 
-# disagrees with loaded files.
-#
-wPopsize = np.shape(weights)[0]
-wNtopics = np.shape(weights)[1]
-
-if wPopsize != config.popSize:
-    print("WARNING: popsize from data files disagrees with cfg.")
-    config.popSize = wPopsize
-
-if wNtopics != config.ntopics:
-    print("WARNING: ntopics from data files disagrees with cfg.")
-    config.ntopics = wNtopics
+state = og_state.WorldState.fromCmdlineArguments(cmdline, config)
 
 #
 # functions for use by the simulation engine
 #
 ufuncs = og_cfg.UserFunctions(og_select.FastPairSelection,
                               og_stop.iterationStop,
-                              og_pot.createTent(0.5, 2.0, -2.0))
+                              og_pot.createTent(0.5))
 
 #
 # run
@@ -87,7 +49,7 @@ ufuncs = og_cfg.UserFunctions(og_select.FastPairSelection,
 polarized = 0
 notPolarized = 0
 
-for i in range(1000):
+for i in range(100):
     state = og_core.run_until_convergence(config, state, ufuncs)
     results = og_opinions.isPolarized(state.history[-1], 0.05)
     for result in results:
