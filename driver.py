@@ -24,7 +24,7 @@ cmdline.printOut()
 # TODO: interpret args to get filename if specified on cmd line
 config = og_cfg.staticParameters()
 config.readFromFile('staticParameters.cfg')
-config.threshold = 0.001
+config.threshold = 0.0001
 config.Kthreshold = 0.00001
 config.printOut()
 
@@ -42,7 +42,7 @@ state = og_state.WorldState.fromCmdlineArguments(cmdline, config)
 #
 
 config.learning_rate = 0.01
-tau = 0.64
+tau = 0.66
 
 ufuncs = og_cfg.UserFunctions(og_select.FastPairSelection,
                               og_stop.totalChangeStop,

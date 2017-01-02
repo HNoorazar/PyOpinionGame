@@ -102,7 +102,7 @@ def one_step(config, state, ufunc):
     for i in range(pairs.shape[0]):
         (curOpinions, c) = handle_pair(config, state, ufunc, curOpinions, 
                                        pairs[i,0], pairs[i,1])
-        total_change = total_change + c
+        total_change = total_change + abs(c)
 
     return (curOpinions, total_change, pairs)
 
@@ -118,10 +118,15 @@ def run_until_convergence(config, state, ufunc):
         # step and pairs that interacted.
         (newOpinions, change, all_pairs) = one_step(config, state, ufunc)
 
+        # compute change as the absolute change from the most recent step and
+        # the previous.  IGNORE the change returned by one_step
+        delt = np.sum(np.abs(state.history[-1]-state.history[-2]))
+
         state.appendToHistory(newOpinions)
+
         iterCount += 1
 
-        terminate = ufunc.stop(config, state, change, iterCount)
+        terminate = ufunc.stop(config, state, delt, iterCount)
 
     state.history = np.delete(state.history, -1, axis=0)
     state.iterCount = iterCount
