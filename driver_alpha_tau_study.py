@@ -40,7 +40,7 @@ state = og_state.WorldState.fromCmdlineArguments(cmdline, config)
 # run
 #
 tau_list = np.arange(0.45, 0.9, 0.01)
-alpha_list = np.arange(0.025, 0.25, 0.01)
+alpha_list = np.arange(0.05, 0.25, 0.01)
 numalphas = len(alpha_list)
 numtaus = len(tau_list)
 
