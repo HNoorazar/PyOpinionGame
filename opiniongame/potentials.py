@@ -8,34 +8,41 @@ through the code.
 """
 from math import exp, pi
 
-def createTent(center, leftSlope, rightSlope):
+#
+# equation for tent:
+#
+# x/tau                   0.0 <= x <= tau
+# -x/(1-tau) + 1/(1-tau)  tau < x <= 1.0
+# 0.0                     elsewhere
+#
+def createTent(center):
+    assert center >= 0.0 and center <= 1.0
     def tent(x):
         if x >= 0 and x < center:
-            return leftSlope
+            return 1.0 / center
         elif x >= center and x <= 1.0:
-            return rightSlope
+            return -1.0 / (1.0 - center)
         else:
-            return 0.0
+            return 0
     return tent
 
-## examples
-
-#indTent = createTent(0.3, 10./3, 0.)
-#midTent = createTent(0.5, 2., -2.)
-#lsTent  = createTent(0.3, 10./3, -10./7)
-#rsTent  = createTent(0.8, 10./8, -5.)
 
 def flatPotential(x):
     return 0.0
 
-def flatTopTent(flatRegion, leftSlope, rightSlope):
+def flatTopTent(flatRegion):
+    assert len(flatRegion) == 2
+    assert flatRegion[0] < flatRegion[1]
+    assert flatRegion[0] >= 0.0 and flatRegion[0] <= 1.0
+    assert flatRegion[1] >= 0.0 and flatRegion[1] <= 1.0
+
     def flatTent(x):
         if x >= 0 and x < flatRegion[0]:
-            return leftSlope
+            return 1.0 / flatRegion[0]
         elif x >= flatRegion[0] and x < flatRegion[1]:
             return 0.0
         elif x >= flatRegion[1] and x <= 1:
-            return rightSlope
+            return -1.0 / (1.0 - flatRegion[1])
         else:
             return 0.0
 
