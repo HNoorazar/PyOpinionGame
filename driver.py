@@ -37,27 +37,28 @@ np.random.seed(config.startingseed)
 state = og_state.WorldState.fromCmdlineArguments(cmdline, config)
 
 #
-# functions for use by the simulation engine
-#
-ufuncs = og_cfg.UserFunctions(og_select.FastPairSelection,
-                              og_stop.iterationStop,
-                              og_pot.createTent(0.5))
-
-#
 # run
 #
-polarized = 0
-notPolarized = 0
 
-for i in range(100):
-    state = og_core.run_until_convergence(config, state, ufuncs)
-    results = og_opinions.isPolarized(state.history[-1], 0.05)
-    for result in results:
-        if result:
-            polarized += 1
-        else:
-            notPolarized += 1
-    state.reset()
-    state.initialOpinions = og_opinions.initialize_opinions(config.popSize, config.ntopics)
+for tau in np.arange(0.1,0.9,0.05):
+    #
+    # functions for use by the simulation engine
+    #
+    ufuncs = og_cfg.UserFunctions(og_select.FastPairSelection,
+                                  og_stop.iterationStop,
+                                  og_pot.createTent(tau))
 
-print((polarized, notPolarized))
+    polarized = 0
+    notPolarized = 0
+    for i in range(100):
+        state = og_core.run_until_convergence(config, state, ufuncs)
+        results = og_opinions.isPolarized(state.history[-1], 0.05)
+        for result in results:
+            if result:
+                polarized += 1
+            else:
+                notPolarized += 1
+        state.reset()
+        state.initialOpinions = og_opinions.initialize_opinions(config.popSize, config.ntopics)
+
+    print((tau, polarized, notPolarized))
