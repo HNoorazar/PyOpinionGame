@@ -124,6 +124,6 @@ def run_until_convergence(config, state, ufunc):
         terminate = ufunc.stop(config, state, change, iterCount)
 
     state.history = np.delete(state.history, -1, axis=0)
+    state.iterCount = iterCount
 
-    # TODO: return iteration count too?
     return state

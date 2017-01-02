@@ -14,6 +14,7 @@ class WorldState:
         self.couplingWeights = couplingWeights
         self.initialOpinions = initialOpinions
         self.history = None
+        self.iterCount = 0
 
     @classmethod
     def fromCmdlineArguments(cls, cmdline, config):
@@ -70,6 +71,7 @@ class WorldState:
 
     def reset(self):
         self.history = None
+        self.iterCount = 0
 
     def currentOpinions(self):
         return self.history[-1]

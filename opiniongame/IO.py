@@ -13,3 +13,12 @@ def loadNamedMatrix(filename, name):
         m = None
     return m
 
+def saveMatrix(filename, matDict):
+    """
+    Write a MATLAB-formatted matrix file given a dictionary of
+    variables.
+    """
+    try:
+        sio.savemat(filename, matDict)
+    except:
+        print("ERROR: could not write matrix file "+filename)

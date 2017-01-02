@@ -24,7 +24,7 @@ cmdline.printOut()
 # TODO: interpret args to get filename if specified on cmd line
 config = og_cfg.staticParameters()
 config.readFromFile('staticParameters.cfg')
-
+config.threshold = 0.01
 config.printOut()
 
 #
@@ -39,26 +39,48 @@ state = og_state.WorldState.fromCmdlineArguments(cmdline, config)
 #
 # run
 #
+tau_list = np.arange(0.45, 0.9, 0.01)
+alpha_list = np.arange(0.025, 0.25, 0.01)
+numalphas = len(alpha_list)
+numtaus = len(tau_list)
 
-for tau in np.arange(0.1,0.9,0.05):
-    #
-    # functions for use by the simulation engine
-    #
-    ufuncs = og_cfg.UserFunctions(og_select.FastPairSelection,
-                                  og_stop.iterationStop,
-                                  og_pot.createTent(tau))
+numvars = 3
 
-    polarized = 0
-    notPolarized = 0
-    for i in range(100):
-        state = og_core.run_until_convergence(config, state, ufuncs)
-        results = og_opinions.isPolarized(state.history[-1], 0.05)
-        for result in results:
-            if result:
-                polarized += 1
-            else:
-                notPolarized += 1
-        state.reset()
-        state.initialOpinions = og_opinions.initialize_opinions(config.popSize, config.ntopics)
+resultMatrix = np.zeros((numalphas, numtaus, numvars))
 
-    print((tau, polarized, notPolarized))
+for (i, alpha) in enumerate(alpha_list):
+    config.learning_rate = alpha
+    print("")
+
+    for (j, tau) in enumerate(tau_list):
+        print((alpha, tau))
+        #
+        # functions for use by the simulation engine
+        #
+        ufuncs = og_cfg.UserFunctions(og_select.FastPairSelection,
+                                      og_stop.totalChangeStop,
+                                      og_pot.createTent(tau))
+
+        polarized = 0
+        notPolarized = 0
+        aveIters = 0
+        for k in range(100):
+            state = og_core.run_until_convergence(config, state, ufuncs)
+
+            results = og_opinions.isPolarized(state.history[-1], 0.05)
+            for result in results:
+                 if result:
+                     polarized += 1
+                 else:
+                     notPolarized += 1
+            aveIters += state.iterCount
+            state.reset()
+            state.initialOpinions = og_opinions.initialize_opinions(config.popSize, config.ntopics)
+
+        resultMatrix[i][j][0] = polarized
+        resultMatrix[i][j][1] = notPolarized
+        resultMatrix[i][j][2] = aveIters/100.0
+
+rdict = {}
+rdict['results'] = resultMatrix
+og_io.saveMatrix('output.mat', rdict)
