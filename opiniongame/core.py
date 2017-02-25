@@ -57,18 +57,6 @@ def handle_pair(config, state, ufunc, opinions, s, h):
     chgS = 0.0
     chgH = 0.0
     
-########    Vectorized of the next part      ##########################   
-########    Why vectorization does not work?
-#    newval = oldS + dS * wS
-#    newval[newval > 1 ] = 1
-#    newval[newval < 0 ] = 0
-#    chgS = np.sum( np.abs(opinions[s,:] - newval) )
-
-#    newval = oldH + dH * wH
-#    newval[newval > 1 ] = 1
-#    newval[newval < 0 ] = 0
-#    chgH = np.sum( np.abs(opinions[h,:] - newval) )
-##################################################################
     for i in range(len(oldS)):
         newval = oldS[i] + dS * wS[i]
         if newval > 1:
@@ -84,7 +72,6 @@ def handle_pair(config, state, ufunc, opinions, s, h):
             newval = 0
         opinions[h, i] = newval
         chgH = chgH + np.abs(opinions[h, i] - newval)
-##################################################################        
 
     return (opinions, chgS + chgH)
 
