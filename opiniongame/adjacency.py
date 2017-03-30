@@ -159,15 +159,3 @@ def MakeBigMatrix( n, p, ubound ):
 
 def CommunitiesMatrix( popSize , comNo , upperBound):
     return MakeBistochastic( MakeBigMatrix(popSize, comNo, upperBound))
-
-##########################################################################
-###################                  #####################################
-###################   Player Choice  #####################################
-###################                  #####################################
-
-def PickTwo(adj):
-    n = np.shape(adj)[0]
-    i = np.random.randint(0, n)
-    j = np.random.choice(range(n), p = adj[i,:].tolist())
-    return [i,j]
-    
