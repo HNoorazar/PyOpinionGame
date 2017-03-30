@@ -88,7 +88,9 @@ def convergedTestBio(matrix):
     return (e1 + e2) > 0.000001
     
 #############################################################################
-################### Here we will do what OneStep does                 #######
+################### Here we will do one step towards                  #######
+################### Making a given matrix a bio-stochastic one        #######
+################### It does what OneStep does                         #######
 ################### in Matt's code inside MakeBistochastic function.  #######
 def OneStepBio(matrix):
     # copy the input so that the original input is not changed.
@@ -146,7 +148,7 @@ def MakeBigMatrix( n, p, ubound ):
                 # Here we take care of interactions between different
                 # communities. The counting purposes are done for
                 # lower part of bigMatrix.
-                BigMatrix[rowStart:rowEnd, colStart:colEnd] = np.random.uniform(low = 0, high = ubound, size = (n, n));
+                BigMatrix[rowStart:rowEnd, colStart:colEnd] = np.random.uniform(low = 0.0, high = ubound, size = (n, n));
                 BigMatrix[colStart:colEnd, rowStart:rowEnd] = BigMatrix[rowStart:rowEnd, colStart:colEnd]
     return BigMatrix
     
