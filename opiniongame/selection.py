@@ -1,6 +1,7 @@
 import numpy as np
 
 # code related to selection of individuals during a game
+# And also this just works on full graph. look at number of games!
 def FastPairSelection(Adj):
     pop_size = int(np.shape(Adj)[1])
     ngames = int(pop_size/2)
@@ -73,7 +74,9 @@ def FastPairSelection(Adj):
 # Pick a pair from a weighted adjacency matrix.
 #
 def PickTwoWeighted(weightedAdj):
-    adj = weightedAdj  # This is done in order to avoid changing weightedAdj
+    # copy the weightedAdj matrix so we can destructively update it
+    # during the algorithm.
+    adj = np.copy(weightedAdj).astype(float)
     n = np.shape(adj)[0]
     i = np.random.randint(0, n)
     rowSum = np.sum(adj[i,:])
