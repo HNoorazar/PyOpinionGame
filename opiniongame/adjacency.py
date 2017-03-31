@@ -111,10 +111,10 @@ def MakeBistochastic(matrix):
     return localMatrix
 
 ##########################################################################
-###################                 ######################################
-################### Make Big Matrix ######################################
-###################                 ######################################
-############ p communities of n individuals each #########################
+###################                                #######################
+###################        Make Big Matrix         #######################
+###################                                #######################
+############  p communities of n individuals each  #######################
 
 def MakeUpper(n):
     noElements = n * (n+1) / 2;
@@ -136,7 +136,7 @@ def MakeBigMatrix( n, p, ubound ):
     for rowCount in range(p):
         for colCount in range(rowCount, p):
             rowStart = rowCount * n;
-            rowEnd   = rowCount * n + n ;
+            rowEnd   = rowCount * n + n;
             colStart = colCount * n;
             colEnd   = colCount * n + n;
             if rowCount == colCount:

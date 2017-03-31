@@ -68,3 +68,30 @@ def FastPairSelection(Adj):
     pairs = pairs[~np.all(pairs == 0, axis=1)]
 
     return pairs
+
+#
+# Pick a pair from a weighted adjacency matrix.
+#
+def PickTwoWeighted(weightedAdj):
+    adj = weightedAdj  # This is done in order to avoid changing weightedAdj
+    n = np.shape(adj)[0]
+    i = np.random.randint(0, n)
+    rowSum = np.sum(adj[i,:])
+    noNeighbors = np.count_nonzero(adj[i,:]) # number of neiboghrs of i
+
+    if rowSum == 1.0:
+        normalizedVector = adj[i,:]
+    #
+    # this would not work if minimum entry in the given row, is smaller than
+    # diff. because then that entry would become negative!
+    #
+    elif rowSum > 1.0:  
+        diff = rowSum - 1.
+        normalizedVector = adj[i,:] - ( diff/noNeighbors )
+        normalizedVector[i] = 0
+    else:
+        diff = 1. - rowSum
+        normalizedVector = adj[i,:] + ( diff/noNeighbors )
+        normalizedVector[i] = 0        
+    j = np.random.choice(range(n), p = normalizedVector.tolist())
+    return [i,j]

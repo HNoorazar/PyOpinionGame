@@ -15,7 +15,7 @@ def interaction_update(oldS, oldH, speaker_potential, hearer_potential, learning
     diff = oldS - oldH
 
     speaker_delta = (learning_rate / 2.0) * speaker_potential(abs(diff)) * diff
-    hearer_delta = (learning_rate / 2.0) * hearer_potential(abs(diff)) * diff
+    hearer_delta = (learning_rate / 2.0)  * hearer_potential(abs(diff))  * diff
 
     x = oldS - speaker_delta
 
