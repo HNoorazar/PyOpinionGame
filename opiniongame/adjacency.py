@@ -87,12 +87,12 @@ def convergedTestBio(matrix):
     e2 = sum(abs(np.sum(localMatrix , axis = 1) - 1));
     return (e1 + e2) > 0.000001
     
-#############################################################################
-################### Here we will do one step towards                  #######
-################### Making a given matrix a bio-stochastic one        #######
-################### It does what OneStep does                         #######
-################### in Matt's code inside MakeBistochastic function.  #######
 def OneStepBio(matrix):
+    """ Here we will do one step towards
+        Making a given matrix a bio-stochastic one        
+        It does what OneStep does                         
+        in Matt's code inside MakeBistochastic function.  
+    """
     # copy the input so that the original input is not changed.
     localMatrix = np.copy(matrix).astype(float);
     
@@ -110,12 +110,6 @@ def MakeBistochastic(matrix):
         localMatrix = OneStepBio(localMatrix);
     return localMatrix
 
-##########################################################################
-###################                                #######################
-###################        Make Big Matrix         #######################
-###################                                #######################
-############  p communities of n individuals each  #######################
-
 def MakeUpper(n):
     noElements = n * (n+1) / 2;
     size = 1 + (-1 + np.sqrt(1 + 8 * noElements)) / 2;
@@ -123,14 +117,15 @@ def MakeUpper(n):
     upper[np.tril_indices(size, -1)] = np.arange(1, noElements+1)
     return upper        
     
-def MakeBigMatrix( n, p, ubound ):
-    # This function makes a adjacency matrix whose entries
-    # will be probabilities of interactions with p communites of size n.
+def MakeBigMatrix(n, p, ubound):
+    """ Make Big Matrix
+        p communities of n individuals each
+    """
+    # inputs- p: number of communities, n: population size in a community
+    #         ubound: upper boung for probability of interaction between communities.
 
-    # probability of interactions within each community are equal, 
-    # but between communities are different.
-    
     # This matrix will turn into a bio-stochastic later.
+    
     BigMatrix = np.zeros(( n*p , n*p ));
     d = (1. / (n-1)) * np.ones((n,n)) - np.diag(np.ones(n) / (n-1));
     for rowCount in range(p):
@@ -152,12 +147,8 @@ def MakeBigMatrix( n, p, ubound ):
                 BigMatrix[colStart:colEnd, rowStart:rowEnd] = BigMatrix[rowStart:rowEnd, colStart:colEnd]
     return BigMatrix
     
-
-##########################################################################
-###################                  #####################################
-################### community Matrix #####################################
-###################                  #####################################
-####### comNo communities of popSize individuals each ####################
-
 def CommunitiesMatrix( popSize , comNo , upperBound):
+    """ community Matrix
+        comNo communities of popSize individuals each 
+    """
     return MakeBistochastic( MakeBigMatrix(popSize, comNo, upperBound))

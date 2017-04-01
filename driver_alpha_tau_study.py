@@ -76,7 +76,9 @@ for (i, alpha) in enumerate(alpha_list):
             aveIters += state.iterCount
             state.reset()
             state.initialOpinions = og_opinions.initialize_opinions(config.popSize, config.ntopics)
-
+        # maybe you want to do Consensus and nonConsensus. Finding consensus is easier!
+        # assuming pop_size = 20, ten people at 1, nine people at 0 and and one person 
+        # at 0.5 will be polarization, but, still ...
         resultMatrix[i][j][0] = polarized
         resultMatrix[i][j][1] = notPolarized
         resultMatrix[i][j][2] = aveIters/100.0

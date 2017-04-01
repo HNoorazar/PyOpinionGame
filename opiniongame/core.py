@@ -94,7 +94,7 @@ def one_step(config, state, ufunc):
     return (curOpinions, total_change, pairs)
 
 #
-# This function runs one single experiment, from t=0 to t=t_conv
+# This function runs one single experiment.
 #
 def run_until_convergence(config, state, ufunc):
     # initialize history with 3D array at time =0
