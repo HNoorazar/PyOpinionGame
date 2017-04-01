@@ -1,10 +1,13 @@
 import numpy as np
-#
-# This function runs a set of experiments with the same initial opinions.
-# Number of Experiments are given in config file.
-# Goal is to have different orders of interactions with the same initials.
-#
+# I think this deserves to go to "core" with default no_of_experiments = 1.
+# As user needs to just change one thing, she can just change no_of_experiments in her driver.py.
+
 def run_all_experiments(config, state, ufunc):
+    """ This function runs a set of experiments with the same initial opinions.
+        Number of Experiments are given in config file.
+        Goal is to have different orders of interactions with the same initials.
+    """
+
     # initialize history with a dictionary.
     all_experiments_history = {}
     
