@@ -99,7 +99,6 @@ def one_step(config, state, ufunc):
 def run_until_convergence(config, state, ufunc):
     # initialize history with 3D array at time =0
     state.initializeHistory()
-
     iterCount = 0
     terminate = False
 

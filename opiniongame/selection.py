@@ -2,6 +2,9 @@ import numpy as np
 
 # code related to selection of individuals during a game
 # And also this just works on full graph. look at number of games!
+
+# pairs are numpy arrays of size (noGames * 2)
+
 def FastPairSelection(Adj):
     pop_size = int(np.shape(Adj)[1])
     ngames = int(pop_size/2)
