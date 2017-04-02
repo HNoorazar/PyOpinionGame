@@ -52,3 +52,19 @@ adjMat = og_adj.CommunitiesMatrix( communityPopSize , numberOfCommunities , uppB
 config.learning_rate = 0.1
 tau = 0.62
 
+config.iterationMax = 1500
+
+#
+# functions for use by the simulation engine
+#
+ufuncs = og_cfg.UserFunctions(og_select.PickTwoWeighted,
+                              og_stop.iterationStop,
+                              og_pot.createTent(tau))
+
+state = og_core.run_until_convergence(config, state, ufuncs)
+
+rdict = {}
+rdict['history'] = state.history
+og_io.saveMatrix('output.mat', rdict)
+
+

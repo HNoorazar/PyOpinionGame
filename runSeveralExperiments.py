@@ -1,6 +1,13 @@
+
+# I think this deserves to go to "core" with 
+# default no_of_experiments = 1.
+# As user needs to just change one thing, 
+# she can just change no_of_experiments in 
+# her driver.py.
+
+
 import numpy as np
-# I think this deserves to go to "core" with default no_of_experiments = 1.
-# As user needs to just change one thing, she can just change no_of_experiments in her driver.py.
+import opiniongame.core as og_core
 
 def run_all_experiments(config, state, ufunc):
     """ This function runs a set of experiments with the same initial opinions.
@@ -16,7 +23,7 @@ def run_all_experiments(config, state, ufunc):
         stateCopy = copy.deepcopy(state)
         
         # 1- run out of all experiments:
-        history = run_until_convergence(config, state, ufunc)
+        history = og_core.run_until_convergence(config, state, ufunc)
         
         all_experiments_history[ 'experiment' + str(experiment_no + 1 )] = history
     return all_experiments_history
