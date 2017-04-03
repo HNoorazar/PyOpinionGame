@@ -1,11 +1,3 @@
-
-# I think this deserves to go to "core" with 
-# default no_of_experiments = 1.
-# As user needs to just change one thing, 
-# she can just change no_of_experiments in 
-# her driver.py.
-
-
 import numpy as np
 import opiniongame.core as og_core
 
