@@ -41,8 +41,8 @@ state = og_state.WorldState.fromCmdlineArguments(cmdline, config)
 # run
 #
 
-config.learning_rate = 0.01
-tau = 0.66
+config.learning_rate = 0.1
+tau = 0.62
 
 ufuncs = og_cfg.UserFunctions(og_select.FastPairSelection,
                               og_stop.totalChangeStop,

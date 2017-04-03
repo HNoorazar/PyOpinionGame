@@ -1,6 +1,10 @@
 import numpy as np
 
 # code related to selection of individuals during a game
+# And also this just works on full graph. look at number of games!
+
+# pairs are numpy arrays of size (noGames * 2)
+
 def FastPairSelection(Adj):
     pop_size = int(np.shape(Adj)[1])
     ngames = int(pop_size/2)
@@ -66,5 +70,38 @@ def FastPairSelection(Adj):
             ii = ii+1
             numavail = numavail-1
     pairs = pairs[~np.all(pairs == 0, axis=1)]
+    return pairs
 
+#
+# Pick a pair from a weighted adjacency matrix.
+#
+def PickTwoWeighted(weightedAdj):
+    # copy the weightedAdj matrix so we can destructively update it
+    # during the algorithm.
+    pairs = np.zeros(shape=(1,2), dtype=int)
+    adj = np.copy(weightedAdj).astype(float)
+    n = np.shape(adj)[0]
+
+    # choose first player
+    pairs[0,0] = np.random.randint(0, n)
+    
+    # find number of neighbors of first player
+    noNeighbors = np.count_nonzero(adj[pairs[0,0],:]) # number of neiboghrs of i
+
+    rowSum = np.sum(adj[pairs[0,0],:])
+    if rowSum == 1.0:
+        normalizedVector = adj[pairs[0,0],:]
+    #
+    # this would not work if minimum entry in the given row, is smaller than
+    # diff. because then that entry would become negative!
+    #
+    elif rowSum > 1.0:  
+        diff = rowSum - 1.
+        normalizedVector = adj[pairs[0,0],:] - ( diff/noNeighbors )
+        normalizedVector[pairs[0,0]] = 0
+    else:
+        diff = 1. - rowSum
+        normalizedVector = adj[pairs[0,0],:] + ( diff/noNeighbors )
+        normalizedVector[pairs[0,0]] = 0
+    pairs[0,1] = np.random.choice(range(n), p = normalizedVector.tolist())
     return pairs

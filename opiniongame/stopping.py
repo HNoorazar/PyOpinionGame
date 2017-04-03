@@ -3,7 +3,9 @@
 A stopping function will return True if it is time to stop,
 False otherwise.
 """
-
+ # TODO: In the long paper, we used "windows stop" 
+ # which was the most effective way. but it is not here.
+ # I even tried the convolution thing, but even that did not work.
 import numpy as np
 
 def totalChangeStop(config, state, change, iterationNo):
