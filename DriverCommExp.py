@@ -46,7 +46,8 @@ config.popSize = numberOfCommunities * communityPopSize
 
 
 # List of upper bound probability of interaction between communities
-uppBound_list = np.arange(0.000001, 0.001, 0.0001) 
+uppBound_list = np.arange(0.000001, 0.001, 0.0001)
+#uppBound_list = np.arange(0.001, 0.01, 0.001)
 
 # Number of different initial opinions.
 noInitials = np.arange(100)
@@ -68,6 +69,10 @@ ufuncs = og_cfg.UserFunctions(og_select.PickTwoWeighted,
 for upperBound in uppBound_list:
     # Generate different adjacency matrix with different prob. of interaction
     # between different communities
+    if upperBound > 0.0001: 
+        config.iterationMax = 50000
+    if upperBound > 0.001: 
+        config.iterationMax = 70000    
     state.adj = og_adj.CommunitiesMatrix(communityPopSize , numberOfCommunities , upperBound)
 
     for countInitials in noInitials:
@@ -79,7 +84,7 @@ for upperBound in uppBound_list:
 
         for gameOrders in noGames:
             state = og_core.run_until_convergence(config, state, ufuncs)
-            print "One Experiment Done"
+            print "One Experiment Done", "gameOrders = " , gameOrders, "countInitials=", countInitials
             all_experiments_history[ 'experiment' + str(gameOrders+1 )] = state.history
         og_io.saveMatrix('output' + '-' + str(upperBound) + '-' + str(countInitials+1) + '.mat', all_experiments_history)
 

@@ -68,11 +68,6 @@ def generateGridAdj(pop_size):
 
     return adj
 
-
-import numpy as np
-
-# Matrices and vectors are numpy arrays!
-
 ############################################################################
 ###################                          ###############################
 ################### Make Bistochastic Matrix ###############################
