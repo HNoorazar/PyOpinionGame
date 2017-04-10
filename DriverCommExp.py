@@ -46,18 +46,18 @@ config.popSize = numberOfCommunities * communityPopSize
 
 
 # List of upper bound probability of interaction between communities
-uppBound_list = np.arange(0.000001, 0.001, 0.0001)
+uppBound_list = np.arange(0.000001, 0.001, 0.001)
 #uppBound_list = np.arange(0.001, 0.01, 0.001)
 
 # Number of different initial opinions.
-noInitials = np.arange(100)
+noInitials = np.arange(1)
 
 # Number of different game orders.
-noGames = np.arange(100)
+noGames = np.arange(1)
 
 config.learning_rate = 0.1
 tau = 0.62
-config.iterationMax = 20000
+config.iterationMax = 1000
 
 #
 # functions for use by the simulation engine
