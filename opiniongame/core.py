@@ -7,15 +7,20 @@ def pick_topic(nTopics):
     """
     return np.random.randint(nTopics)
 
-def interaction_update(oldS, oldH, speaker_potential, hearer_potential, learning_rate):
+def interaction_update(oldS, oldH, speaker_potential, hearer_potential, config, state, pPairs):
     """
     Input: opinion state of speaker and hearer, potential functions for each individual, learning rate
     Output: updated opinion state of each, and delta for each.
     """
     diff = oldS - oldH
-
-    speaker_delta = (learning_rate / 2.0) * speaker_potential(abs(diff)) * diff
-    hearer_delta = (learning_rate / 2.0)  * hearer_potential(abs(diff))  * diff
+    if config.uniqStrength == 0:
+        speaker_delta = (config.learning_rate / 2.0) * speaker_potential(abs(diff)) * diff
+        hearer_delta = (config.learning_rate / 2.0)  * hearer_potential(abs(diff))  * diff
+    else:
+        print "yayyyy"
+        indvTendency = findTendencies(config, state, pPairs)
+        speaker_delta = (config.learning_rate / 2.0) * speaker_potential(abs(diff)) * diff + indvTendency[0]
+        hearer_delta = (config.learning_rate / 2.0)  * hearer_potential(abs(diff))  * diff + indvTendency[1]
 
     x = oldS - speaker_delta
 
@@ -49,7 +54,7 @@ def handle_pair(config, state, ufunc, opinions, s, h):
 
     (newS, dS, newH, dH) = interaction_update(oldS[topic], oldH[topic],
                                               speaker_func, hearer_func,
-                                              config.learning_rate)
+                                              config, state, [s, h])
 
     # Record all changes happening to each person, each topic, )
     wS = state.couplingWeights[s, topic, :]
@@ -131,7 +136,7 @@ def findTendencies(config, state, players):
     The function computes a certain variance for each individual's 
     random distribution of uniqueness tendency.and then samples from given distributions.
     """
-    tendencies = None
+    tendencies = np.zeros((2,1))
     # find current opinion
     currentOpinions = np.copy(state.history[-1,:]).astype(float)
 
