@@ -51,6 +51,8 @@ state.initialOpinions = og_opinions.initialize_opinions(config.popSize, config.n
 state.couplingWeights = og_coupling.weights_no_coupling(config.popSize, config.ntopics)
 
 config.learning_rate = 0.1
+config.uniqStrength = .001
+
 tau = 0.62
 
 config.iterationMax = 20000
