@@ -17,7 +17,6 @@ def interaction_update(oldS, oldH, speaker_potential, hearer_potential, config, 
         speaker_delta = (config.learning_rate / 2.0) * speaker_potential(abs(diff)) * diff
         hearer_delta = (config.learning_rate / 2.0)  * hearer_potential(abs(diff))  * diff
     else:
-        print "yayyyy"
         indvTendency = findTendencies(config, state, pPairs)
         speaker_delta = (config.learning_rate / 2.0) * speaker_potential(abs(diff)) * diff + indvTendency[0]
         hearer_delta = (config.learning_rate / 2.0)  * hearer_potential(abs(diff))  * diff + indvTendency[1]
