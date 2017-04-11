@@ -159,9 +159,8 @@ def findTendencies(config, state, players):
     speakerDistaces = speakerDistaces[speakerNeighbors]
     hearerDistances = hearerDistances[hearerNeighbors]
     
-    speakerVariance = config.uniqStrength * np.sum(np.power(np.e, speakerDistaces))
-    hearerVariance  = config.uniqStrength * np.sum(np.power(np.e, hearerDistances))
-    
+    speakerVariance = config.uniqStrength * np.sum(np.power(np.e, speakerDistaces)) / (len(speakerNeighbors) ** 2)
+    hearerVariance  = config.uniqStrength * np.sum(np.power(np.e, hearerDistances)) / (len(hearerNeighbors) ** 2)
     # speaker uniqueness
     tendencies[0] = np.random.normal(loc=0.0, scale=speakerVariance, size=None)
     # hearer uniqueness
