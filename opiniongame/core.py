@@ -140,16 +140,20 @@ def findTendencies(config, state, players):
     currentOpinions = np.copy(state.history[-1,:]).astype(float)
 
     # find neighbors of players
+    # returns a vector of size popSize where neighbors location is True, 
+    # and non-neighbors are False
     speakerNeighbors = state.adj[players[0],:] > 0.
+    speakerNeighbors = speakerNeighbors.reshape((len(speakerNeighbors),1))
+
     hearerNeighbors =  state.adj[players[1],:] > 0.
+    hearerNeighbors = speakerNeighbors.reshape((len(hearerNeighbors),1))
     
     # pick up opinions of neighbors of players
     speakNeOpinions = np.multiply(speakerNeighbors, currentOpinions)
-    hearNeOpinions = np.multiply(hearerNeighbors, currentOpinions)
-    
     speakerDistaces = -np.abs((currentOpinions[players[0]] * speakerNeighbors) - \
-                                                               speakNeOpinions)
+                                                              speakNeOpinions)
 
+    hearNeOpinions = np.multiply(hearerNeighbors, currentOpinions)
     hearerDistances = -np.abs((currentOpinions[players[1]] * hearerNeighbors ) - \
                                                                hearNeOpinions)
 	
@@ -160,15 +164,16 @@ def findTendencies(config, state, players):
 	# that has come from neighbors with the same opinions!
 	
     speakerDistaces = speakerDistaces[speakerNeighbors]
-    v = np.power(np.e, 1 + speakerDistaces)
-    print "max V = ", np.max(v)
-    print "length V = ", len(v)
-    print "sumV= ", np.sum(v)
-    
-    hearerDistances = hearerDistances[hearerNeighbors]
-    speakerVariance = (config.uniqStrength / (np.e - 1) ) * (-len(speakerNeighbors - 1) + np.sum(np.power(np.e, 1 + speakerDistaces)))
+    speakerDistaces = speakerDistaces.reshape((len(speakerDistaces),1))
 
-    hearerVariance = (config.uniqStrength / (np.e - 1) ) * (-len(hearerNeighbors - 1) + np.sum(np.power(np.e, 1 + hearerDistances)))
+    hearerDistances = hearerDistances[hearerNeighbors]
+    hearerDistances = speakerDistaces.reshape((len(hearerDistances),1))
+
+    speakerVariance = (config.uniqStrength / (np.e - 1) ) * (-len(speakerDistaces) + \
+                                      np.sum(np.power(np.e, 1 + speakerDistaces)))
+
+    hearerVariance = (config.uniqStrength / (np.e - 1) ) * (-len(hearerDistances) + \
+                                     np.sum(np.power(np.e, 1 + hearerDistances)))
 
     # speaker uniqueness force
     if speakerVariance == 0:
