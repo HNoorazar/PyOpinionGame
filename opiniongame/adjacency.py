@@ -96,6 +96,12 @@ def OneStepBio(matrix):
     
     # Divide each column by sum of the elements in the given column.
     localMatrix = np.dot(localMatrix, np.diag(1/np.sum(localMatrix, axis=0)));
+    
+    """ The following line is added to make symmetrix doubly stochastic matrix.
+    we can remove it to have a doubly-stochastic matrix.
+    However, I still like it not to be symmetric! :D
+    """
+    localMatrix = np.triu(localMatrix) + np.transpose(np.triu(localMatrix,1));
     return localMatrix
     
 
