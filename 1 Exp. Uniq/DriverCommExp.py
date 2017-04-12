@@ -47,17 +47,17 @@ config.popSize = numberOfCommunities * communityPopSize
 
 # List of upper bound probability of interaction between communities
 uppBound_list = np.arange(0.000001, 0.001, 0.001)
-uppBound_list = np.arange(0.000001, 0.01, 0.001)
-uppBound_list = np.arange(0.01, 0.011, 0.001)
 
 #uppBound_list = np.arange(0.001, 0.01, 0.001)
 
+# Number of different initial opinions.
+noInitials = np.arange(1)
 
-noInitials = np.arange(1) # Number of different initial opinions.
-noGames = np.arange(1)    # Number of different game orders.
+# Number of different game orders.
+noGames = np.arange(1)
 
 config.learning_rate = 0.1
-config.uniqStrength = .0002
+config.uniqStrength = .0005
 
 tau = 0.62
 config.iterationMax = 6000
@@ -75,9 +75,9 @@ for upperBound in uppBound_list:
     # Generate different adjacency matrix with different prob. of interaction
     # between different communities
     if upperBound > 0.0001: 
-        config.iterationMax = 6000
+        config.iterationMax = 10000
     if upperBound > 0.001: 
-        config.iterationMax = 6000  
+        config.iterationMax = 12000  
     state.adj = og_adj.CommunitiesMatrix(communityPopSize, numberOfCommunities, upperBound)
 
     for countInitials in noInitials:
@@ -96,9 +96,8 @@ for upperBound in uppBound_list:
 
         for gameOrders in noGames:
             state = og_core.run_until_convergence(config, state, ufuncs)
-            print "One Experiment Done", "gameOrders = " , gameOrders+1, "countInitials=", countInitials+1
+            print "One Experiment Done", "gameOrders = " , gameOrders, "countInitials=", countInitials
             all_experiments_history[ 'experiment' + str(gameOrders+1 )] = state.history
-        print "str= ", str(upperBound)
         og_io.saveMatrix('uB ' + str(upperBound) + ' * initCount ' + str(countInitials+1) + 
                          ' * uniqStrength ' + str(config.uniqStrength) +'.mat', all_experiments_history)
 

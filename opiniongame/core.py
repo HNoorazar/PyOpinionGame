@@ -180,7 +180,6 @@ def findTendencies(config, state, players):
         tendencies[0] = 0
     else:
         tendencies[0] = np.random.normal(loc=0.0, scale=speakerVariance, size=None)
-
     # hearer uniqueness force
     if hearerVariance == 0:
         tendencies[1] = 0

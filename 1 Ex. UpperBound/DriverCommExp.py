@@ -47,8 +47,7 @@ config.popSize = numberOfCommunities * communityPopSize
 
 # List of upper bound probability of interaction between communities
 uppBound_list = np.arange(0.000001, 0.001, 0.001)
-uppBound_list = np.arange(0.000001, 0.01, 0.001)
-uppBound_list = np.arange(0.01, 0.011, 0.001)
+uppBound_list = np.arange(0.000001, 0.011, 0.001)
 
 #uppBound_list = np.arange(0.001, 0.01, 0.001)
 
