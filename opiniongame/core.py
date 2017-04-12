@@ -147,8 +147,11 @@ def findTendencies(config, state, players):
     speakNeOpinions = np.multiply(speakerNeighbors, currentOpinions)
     hearNeOpinions = np.multiply(hearerNeighbors, currentOpinions)
     
-    speakerDistaces = -np.abs((currentOpinions[players[0]] * speakerNeighbors) - speakNeOpinions)
-    hearerDistances = -np.abs((currentOpinions[players[1]] * hearerNeighbors ) - hearNeOpinions)
+    speakerDistaces = -np.abs((currentOpinions[players[0]] * speakerNeighbors) - \
+                                                               speakNeOpinions)
+
+    hearerDistances = -np.abs((currentOpinions[players[1]] * hearerNeighbors ) - \
+                                                               hearNeOpinions)
 	
 	# Just pick up the d_ij's of neighbors. in above vectors there are some
 	# extra zeros which came from nodes that are not neighbors of players.
@@ -157,12 +160,28 @@ def findTendencies(config, state, players):
 	# that has come from neighbors with the same opinions!
 	
     speakerDistaces = speakerDistaces[speakerNeighbors]
-    hearerDistances = hearerDistances[hearerNeighbors]
+    v = np.power(np.e, 1 + speakerDistaces)
+    print "max V = ", np.max(v)
+    print "length V = ", len(v)
+    print "sumV= ", np.sum(v)
     
-    speakerVariance = config.uniqStrength * np.sum(np.power(np.e, speakerDistaces)) / (len(speakerNeighbors) ** 2)
-    hearerVariance  = config.uniqStrength * np.sum(np.power(np.e, hearerDistances)) / (len(hearerNeighbors) ** 2)
-    # speaker uniqueness
-    tendencies[0] = np.random.normal(loc=0.0, scale=speakerVariance, size=None)
-    # hearer uniqueness
-    tendencies[1] = np.random.normal(loc=0.0, scale=hearerVariance, size=None)
+    hearerDistances = hearerDistances[hearerNeighbors]
+    speakerVariance = (config.uniqStrength / (np.e - 1) ) * (-len(speakerNeighbors - 1) + np.sum(np.power(np.e, 1 + speakerDistaces)))
+
+    hearerVariance = (config.uniqStrength / (np.e - 1) ) * (-len(hearerNeighbors - 1) + np.sum(np.power(np.e, 1 + hearerDistances)))
+
+    # speaker uniqueness force
+    if speakerVariance == 0:
+        tendencies[0] = 0
+    else:
+        tendencies[0] = np.random.normal(loc=0.0, scale=speakerVariance, size=None)
+
+    # hearer uniqueness force
+    if hearerVariance == 0:
+        tendencies[1] = 0
+    else:
+        tendencies[1] = np.random.normal(loc=0.0, scale=hearerVariance, size=None)
     return tendencies
+    
+    
+    
