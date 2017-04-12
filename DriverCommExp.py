@@ -40,13 +40,14 @@ state = og_state.WorldState.fromCmdlineArguments(cmdline, config)
 #
 # run
 #
-numberOfCommunities = 5
-communityPopSize    = 50
+numberOfCommunities = 3
+communityPopSize    = 25
 config.popSize = numberOfCommunities * communityPopSize
 
 
 # List of upper bound probability of interaction between communities
 uppBound_list = np.arange(0.000001, 0.001, 0.001)
+
 #uppBound_list = np.arange(0.001, 0.01, 0.001)
 
 # Number of different initial opinions.
@@ -56,10 +57,10 @@ noInitials = np.arange(1)
 noGames = np.arange(1)
 
 config.learning_rate = 0.1
-config.uniqStrength = .00001
+config.uniqStrength = .0001
 
 tau = 0.62
-config.iterationMax = 1
+config.iterationMax = 6000
 
 config.printOut()
 
@@ -76,8 +77,10 @@ for upperBound in uppBound_list:
     if upperBound > 0.0001: 
         config.iterationMax = 50000
     if upperBound > 0.001: 
-        config.iterationMax = 70000    
-    state.adj = og_adj.CommunitiesMatrix(communityPopSize , numberOfCommunities , upperBound)
+        config.iterationMax = 70000  
+    upperBound = 1
+    state.adj = og_adj.CommunitiesMatrix(communityPopSize, numberOfCommunities, upperBound)
+    print state.adj[0:4,25:38]
 
     for countInitials in noInitials:
         # for each adjacency, generate 100 different initial opinions
@@ -98,7 +101,7 @@ for upperBound in uppBound_list:
 #       just like from command line vs. default.
 
 # TODO: adjacency is provided here, and popSize is changed manually,
-# but still, in the code and selection, we have problem. 
+# but still, in the code and selection, we have problem.
 # population size is not changed there
 # in the code, popSize is assumed 20. (initialOpinions are 20-by-20).
 # we have to fix that! initialOpinion should have a proper size, based on
@@ -106,4 +109,4 @@ for upperBound in uppBound_list:
 
 
 # ToDo : Stuff being printer on the command lines are nor correct
-# if we provide stuff in the driver. 
+# if we provide stuff in the driver.
