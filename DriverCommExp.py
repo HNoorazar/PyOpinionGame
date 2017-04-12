@@ -56,7 +56,8 @@ noInitials = np.arange(1)
 noGames = np.arange(1)
 
 config.learning_rate = 0.1
-config.uniqStrength = .001
+config.uniqStrength = .00001
+
 tau = 0.62
 config.iterationMax = 1
 
