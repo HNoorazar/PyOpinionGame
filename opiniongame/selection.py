@@ -134,7 +134,7 @@ def pickMaxPlayersWeightedAdj(weightedAdjacency):
     
     # copy the adjacency matrix so we can destructively update it
     # during the algorithm.
-    M = np.array(Adj, copy=True)
+    M = np.array(weightedAdjacency, copy=True)
     
     # list of available individuals.
     avail = np.arange(pop_size)
