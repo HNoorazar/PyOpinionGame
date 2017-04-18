@@ -1,20 +1,16 @@
 # First Driver for Community Identity
 
 import numpy as np
-from matplotlib import pyplot as plt
-from matplotlib import animation
 
 import opiniongame.config as og_cfg
 import opiniongame.IO as og_io
 import opiniongame.coupling as og_coupling
 import opiniongame.state as og_state
-import opiniongame.opinions as og_opinions
 import opiniongame.adjacency as og_adj
 import opiniongame.selection as og_select
 import opiniongame.potentials as og_pot
 import opiniongame.core as og_core
 import opiniongame.stopping as og_stop
-import numpy as np
 #
 # process command line
 #
@@ -44,14 +40,14 @@ config.popSize = numberOfCommunities * communityPopSize
 
 # List of upper bound probability of interaction between communities
 uppBound_list = np.arange(0.001, 0.05, 0.005)
-uppBound_list = np.arange(0.011, 0.0111, 0.001)
+uppBound_list = np.arange(0.017, 0.0171, 0.001)
 
 # List of uniqueness Strength parameter
 individStrength = np.arange(0.0, 0.1, 0.05)
 
 config.learning_rate = 0.1
 tau = 0.62
-config.iterationMax = 100
+config.iterationMax = 12000
 config.printOut()
 #
 # functions for use by the simulation engine
@@ -72,7 +68,7 @@ for uniqForce in individStrength:
         state.adj = og_adj.CommunitiesMatrix(communityPopSize, numberOfCommunities, upperBound)
     
         if upperBound >= 0.01:
-            config.iterationMax = 100
+            config.iterationMax = 12000
  
         for countInitials in noInitials:
             # for each adjacency, generate 100 different initial opinions
