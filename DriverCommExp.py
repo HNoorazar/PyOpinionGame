@@ -44,14 +44,14 @@ config.popSize = numberOfCommunities * communityPopSize
 
 # List of upper bound probability of interaction between communities
 uppBound_list = np.arange(0.001, 0.05, 0.005)
-uppBound_list = np.arange(0.011, 0.0131, 0.001)
+uppBound_list = np.arange(0.011, 0.0111, 0.001)
 
 # List of uniqueness Strength parameter
-individStrength = np.arange(0.0, 0.0001, 0.1)
+individStrength = np.arange(0.0, 0.1, 0.05)
 
 config.learning_rate = 0.1
 tau = 0.62
-config.iterationMax = 12000
+config.iterationMax = 100
 config.printOut()
 #
 # functions for use by the simulation engine
@@ -60,8 +60,8 @@ ufuncs = og_cfg.UserFunctions(og_select.PickTwoWeighted,
                               og_stop.iterationStop,
                               og_pot.createTent(tau))
                               
-noInitials = np.arange(20) # Number of different initial opinions.
-noGames = np.arange(25)    # Number of different game orders.
+noInitials = np.arange(1) # Number of different initial opinions.
+noGames = np.arange(1)    # Number of different game orders.
                               
 # Run experiments with different adjacencies, different initials, and different order of games.
 for uniqForce in individStrength:
@@ -72,7 +72,7 @@ for uniqForce in individStrength:
         state.adj = og_adj.CommunitiesMatrix(communityPopSize, numberOfCommunities, upperBound)
     
         if upperBound >= 0.01:
-            config.iterationMax = 12000
+            config.iterationMax = 100
  
         for countInitials in noInitials:
             # for each adjacency, generate 100 different initial opinions
