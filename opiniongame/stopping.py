@@ -47,3 +47,15 @@ def averageChangeStop(config, state, change, iterationNo):
         return True
     else:
         return False
+
+def polarizationStop(config, state, change, iterationNo):
+    """
+    Stop if 95% of population is polarized.
+    """
+    v = np.reshape(state.history[-1], np.size(state.history[-1], 0))
+    if (np.sum( i>0.95 for i in v) + np.sum( k<0.05 for k in v ) ) > (.95 * config.popSize):
+        return True
+    else:
+        return False
+
+

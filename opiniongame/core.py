@@ -123,7 +123,6 @@ def run_until_convergence(config, state, ufunc):
 
     state.history = np.delete(state.history, -1, axis=0)
     state.iterCount = iterCount
-
     return state
 #
 # This function finds uniqueness tendency of two players.
