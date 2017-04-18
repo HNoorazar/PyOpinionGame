@@ -118,8 +118,9 @@ def run_until_convergence(config, state, ufunc):
         state.appendToHistory(newOpinions)
 
         iterCount += 1
-
-        terminate = ufunc.stop(config, state, delt, iterCount)
+        userTermination = ufunc.stop(config, state, delt, iterCount)
+        
+        terminate = og_stop.polarizationStop(config, state, delt, iterCount) or userTermination
 
     state.history = np.delete(state.history, -1, axis=0)
     state.iterCount = iterCount
