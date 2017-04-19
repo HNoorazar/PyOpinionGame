@@ -37,7 +37,7 @@ class staticParameters:
         Create static parameter object with default parameters.
         """
         self.learning_rate = .1
-        self.uniqStrength = 0.
+        self.uniqstrength = 0.
         self.no_of_experiments = 100
         self.popSize = 20
         self.threshold = .000001
@@ -52,7 +52,7 @@ class staticParameters:
         print("StaticParameters:")
         print("=================")
         print("Learning rate     = "+str(self.learning_rate))
-        print("Unique. Strength  = "+str(self.uniqStrength))        
+        print("Unique. Strength  = "+str(self.uniqstrength))        
         print("NumExperiments    = "+str(self.no_of_experiments))
         print("PopSize           = "+str(self.popSize))
         print("Threshold         = "+str(self.threshold))
@@ -68,7 +68,7 @@ class staticParameters:
 
         config.add_section('parameters')
         config.set('parameters', 'learning_rate', self.learning_rate)
-        config.set('parameters', 'uniqStrength', self.uniqStrength)
+        config.set('parameters', 'uniqstrength', self.uniqstrength)
         config.set('parameters', 'threshold', self.threshold)
         config.set('parameters', 'Hthreshold', self.Hthreshold)
         config.set('parameters', 'Kthreshold', self.Kthreshold)
@@ -87,7 +87,7 @@ class staticParameters:
         config.read(fname)
 
         self.learning_rate = config.getfloat('parameters', 'learning_rate')
-        self.uniqStrength = config.getfloat('parameters', 'uniqStrength')        
+        self.uniqstrength = config.getfloat('parameters', 'uniqstrength')        
         self.threshold = config.getfloat('parameters', 'threshold')
         self.Hthreshold = config.getfloat('parameters', 'Hthreshold')
         self.Kthreshold = config.getfloat('parameters', 'Kthreshold')
