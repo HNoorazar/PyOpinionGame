@@ -5,7 +5,7 @@ Simulation configuration related code goes in here.abs
   needed by the simulation that we want to make parameters.
 - command line argument processing
 """
-
+import os
 import configparser
 import argparse
 
@@ -52,7 +52,7 @@ class staticParameters:
         print("StaticParameters:")
         print("=================")
         print("Learning rate     = "+str(self.learning_rate))
-        print("Unique. Strength  = "+str(self.uniqstrength))        
+        print("Unique. strength  = "+str(self.uniqstrength))        
         print("NumExperiments    = "+str(self.no_of_experiments))
         print("PopSize           = "+str(self.popSize))
         print("Threshold         = "+str(self.threshold))
@@ -85,7 +85,6 @@ class staticParameters:
     def readFromFile(self, fname):
         config = configparser.RawConfigParser()
         config.read(fname)
-
         self.learning_rate = config.getfloat('parameters', 'learning_rate')
         self.uniqstrength = config.getfloat('parameters', 'uniqstrength')        
         self.threshold = config.getfloat('parameters', 'threshold')
