@@ -22,16 +22,19 @@ cmdline.printOut()
 config = og_cfg.staticParameters()
 
 config.readFromFile('staticParameters.cfg')
+print "config.learning_rate", config.learning_rate
+config.uniqStrength = 10
+print "config.uniqStrength= ", config.uniqStrength
 config.threshold = 0.01
 config.printOut()
 #
 # seed PRNG: must do this before any random numbers are
 # ever sampled during default generation
 #
-config.startingseed = 20
 print("SEEDING PRNG: "+str(config.startingseed))
 np.random.seed(config.startingseed)
 state = og_state.WorldState.fromCmdlineArguments(cmdline, config)
+
 #
 # run
 #
@@ -58,7 +61,6 @@ ufuncs = og_cfg.UserFunctions(og_select.PickTwoWeighted,
                               
 noInitials = np.arange(1) # Number of different initial opinions.
 noGames = np.arange(1)    # Number of different game orders.
-                              
 # Run experiments with different adjacencies, different initials, and different order of games.
 for uniqForce in individStrength:
     config.uniqStrength = uniqForce
