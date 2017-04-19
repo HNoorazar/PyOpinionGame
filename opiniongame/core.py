@@ -13,7 +13,7 @@ def interaction_update(oldS, oldH, speaker_potential, hearer_potential, config, 
     Output: updated opinion state of each, and delta for each.
     """
     diff = oldS - oldH
-    if config.uniqStrength == 0:
+    if config.uniqstrength == 0:
         speaker_delta = (config.learning_rate / 2.0) * speaker_potential(abs(diff)) * diff
         hearer_delta = (config.learning_rate / 2.0)  * hearer_potential(abs(diff))  * diff
     else:
