@@ -28,8 +28,8 @@ But when I run this code via python it cannot read uniqStrength!
 What the hell???
 """
 print "config.learning_rate", config.learning_rate
-config.uniqStrength = 10
-print "config.uniqStrength= ", config.uniqStrength
+config.uniqstrength = 10
+print "config.uniqStrength= ", config.uniqstrength
 config.threshold = 0.01
 config.printOut()
 #
@@ -68,7 +68,7 @@ noInitials = np.arange(1) # Number of different initial opinions.
 noGames = np.arange(1)    # Number of different game orders.
 # Run experiments with different adjacencies, different initials, and different order of games.
 for uniqForce in individStrength:
-    config.uniqStrength = uniqForce
+    config.uniqstrength = uniqForce
     for upperBound in uppBound_list:
         # Generate different adjacency matrix with different prob. of interaction
         # between different communities
@@ -99,5 +99,5 @@ for uniqForce in individStrength:
                 state = og_core.run_until_convergence(config, state, ufuncs)
                 print "One Experiment Done" , "gameOrders = " , gameOrders+1
                 all_experiments_history[ 'experiment' + str(gameOrders+1)] = state.history
-            og_io.saveMatrix('uB' + str(upperBound) + '*uS' + str(config.uniqStrength) + 
+            og_io.saveMatrix('uB' + str(upperBound) + '*uS' + str(config.uniqstrength) + 
                              '*initCount' + str(countInitials+21) + '.mat', all_experiments_history)
