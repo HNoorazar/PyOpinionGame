@@ -20,6 +20,7 @@ cmdline.printOut()
 # load configuration
 #
 config = og_cfg.staticParameters()
+
 config.readFromFile('staticParameters.cfg')
 config.threshold = 0.01
 config.printOut()
@@ -27,9 +28,9 @@ config.printOut()
 # seed PRNG: must do this before any random numbers are
 # ever sampled during default generation
 #
+config.startingseed = 20
 print("SEEDING PRNG: "+str(config.startingseed))
 np.random.seed(config.startingseed)
-
 state = og_state.WorldState.fromCmdlineArguments(cmdline, config)
 #
 # run
@@ -39,15 +40,14 @@ communityPopSize    = 25
 config.popSize = numberOfCommunities * communityPopSize
 
 # List of upper bound probability of interaction between communities
-uppBound_list = np.arange(0.001, 0.05, 0.005)
-uppBound_list = np.arange(0.017, 0.0171, 0.001)
+uppBound_list = np.arange(0.001, 0.0161, 0.003)
 
 # List of uniqueness Strength parameter
-individStrength = np.arange(0.0, 0.1, 0.05)
+individStrength = np.arange(0, 0.1, 0.1)
 
 config.learning_rate = 0.1
 tau = 0.62
-config.iterationMax = 12000
+config.iterationMax = 10000
 config.printOut()
 #
 # functions for use by the simulation engine
@@ -70,6 +70,9 @@ for uniqForce in individStrength:
         if upperBound >= 0.01:
             config.iterationMax = 12000
  
+        if upperBound <= 0.004:
+            config.iterationMax = 8000
+            
         for countInitials in noInitials:
             # for each adjacency, generate 100 different initial opinions
             # state.initialOpinions = og_opinions.initialize_opinions(config.popSize, config.ntopics)
@@ -88,7 +91,6 @@ for uniqForce in individStrength:
             for gameOrders in noGames:
                 state = og_core.run_until_convergence(config, state, ufuncs)
                 print "One Experiment Done" , "gameOrders = " , gameOrders+1
-                all_experiments_history[ 'experiment' + str(gameOrders+1 )] = state.history
+                all_experiments_history[ 'experiment' + str(gameOrders+1)] = state.history
             og_io.saveMatrix('uB' + str(upperBound) + '*uS' + str(config.uniqStrength) + 
-                             '*initCount' + str(countInitials+1) + '.mat', all_experiments_history)
-
+                             '*initCount' + str(countInitials+21) + '.mat', all_experiments_history)
