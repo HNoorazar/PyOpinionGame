@@ -20,8 +20,13 @@ cmdline.printOut()
 # load configuration
 #
 config = og_cfg.staticParameters()
-
 config.readFromFile('staticParameters.cfg')
+
+""" What is wrong here???? 
+Terminal works here, if I do this two lines in python command window, it works.
+But when I run this code via python it cannot read uniqStrength!
+What the hell???
+"""
 print "config.learning_rate", config.learning_rate
 config.uniqStrength = 10
 print "config.uniqStrength= ", config.uniqStrength
