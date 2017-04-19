@@ -1,11 +1,9 @@
 """
 Simulation configuration related code goes in here.abs
-
 - Configuration reader and state object.
 - Data structure containing a set of closures for specific functions
   needed by the simulation that we want to make parameters.
 - command line argument processing
-
 """
 
 import configparser
