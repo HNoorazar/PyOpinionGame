@@ -27,9 +27,6 @@ Terminal works here, if I do this two lines in python command window, it works.
 But when I run this code via python it cannot read uniqStrength!
 What the hell???
 """
-print "config.learning_rate", config.learning_rate
-config.uniqstrength = 10
-print "config.uniqStrength= ", config.uniqstrength
 config.threshold = 0.01
 config.printOut()
 #
@@ -39,7 +36,6 @@ config.printOut()
 print("SEEDING PRNG: "+str(config.startingseed))
 np.random.seed(config.startingseed)
 state = og_state.WorldState.fromCmdlineArguments(cmdline, config)
-
 #
 # run
 #
