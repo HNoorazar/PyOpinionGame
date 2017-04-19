@@ -85,7 +85,7 @@ class staticParameters:
     def readFromFile(self, fname):
         config = configparser.RawConfigParser()
         config.read(fname)
-        
+
         self.learning_rate = config.getfloat('parameters', 'learning_rate')
         self.uniqStrength = config.getfloat('parameters', 'uniqStrength')        
         self.threshold = config.getfloat('parameters', 'threshold')
