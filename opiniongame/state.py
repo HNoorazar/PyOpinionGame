@@ -9,11 +9,14 @@ import opiniongame.adjacency as og_adj
 import numpy as np
 
 class WorldState:
-    def __init__(self, adj, couplingWeights, initialOpinions):
+    def __init__(self, adj, couplingWeights, initialOpinions, initialHistorySize=100, historyGrowthScale=2):
         self.adj = adj
         self.couplingWeights = couplingWeights
         self.initialOpinions = initialOpinions
-        self.history = None
+        self.individualCount = np.size(initialOpinions, 0)
+        self.initialHistorySize = initialHistorySize
+        self.historyGrowthScale = historyGrowthScale
+        self.initializeHistory()
         self.iterCount = 0
 
     @classmethod
@@ -62,19 +65,28 @@ class WorldState:
 
 
     def initializeHistory(self):
-        hist = np.array([self.initialOpinions], copy=True)
-        hist = np.concatenate((hist, [self.initialOpinions]), axis=0)
-        self.history = hist
+        self.individualCount = np.size(self.initialOpinions, 0)
+        self.numTopics = np.size(self.initialOpinions, 1)
+        self.history = np.zeros([self.initialHistorySize, self.individualCount, self.numTopics])
+        self.history[0,:,:] = self.initialOpinions[:,:]
+        self.nextHistoryIndex = 1
 
     def appendToHistory(self, newOpinions):
-        self.history = np.concatenate((self.history, [newOpinions]), axis=0)
+        curHistorySize = np.size(self.history,0)
+        if curHistorySize == self.nextHistoryIndex:
+            newhist = np.zeros([int(curHistorySize * self.historyGrowthScale), self.individualCount, self.numTopics])
+            newhist[0:curHistorySize, :, :] = self.history
+            self.history = newhist
+        self.history[self.nextHistoryIndex,:,:] = newOpinions[:,:]
+        self.nextHistoryIndex += 1 
 
     def reset(self):
-        self.history = None
+        self.history[:,:,:] = 0
+        self.nextHistoryIndex = 0
         self.iterCount = 0
 
     def currentOpinions(self):
-        return self.history[-1]
+        return self.history[self.nextHistoryIndex-1]
 
     def validate(self):
         # validation of data sizes

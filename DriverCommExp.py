@@ -2,6 +2,7 @@
 
 import numpy as np
 
+#import cProfile
 import opiniongame.config as og_cfg
 import opiniongame.IO as og_io
 import opiniongame.coupling as og_coupling
@@ -22,18 +23,13 @@ cmdline.printOut()
 config = og_cfg.staticParameters()
 config.readFromFile('staticParameters.cfg')
 
-""" What is wrong here???? 
-Terminal works here, if I do this two lines in python command window, it works.
-But when I run this code via python it cannot read uniqStrength!
-What the hell???
-"""
 config.threshold = 0.01
 config.printOut()
 #
 # seed PRNG: must do this before any random numbers are
 # ever sampled during default generation
 #
-print("SEEDING PRNG: "+str(config.startingseed))
+print(("SEEDING PRNG: "+str(config.startingseed)))
 np.random.seed(config.startingseed)
 state = og_state.WorldState.fromCmdlineArguments(cmdline, config)
 #
@@ -88,12 +84,13 @@ for uniqForce in individStrength:
    
             state.couplingWeights = og_coupling.weights_no_coupling(config.popSize, config.ntopics)
             all_experiments_history = {}
-            print "(uniqForce, upperBound)  =(", uniqForce, "," , upperBound , ")"
-            print "countInitials=", countInitials + 1
+            print("(uniqForce, upperBound)  =(", uniqForce, "," , upperBound , ")")
+            print("countInitials=", countInitials + 1)
             
             for gameOrders in noGames:
+                #cProfile.run('og_core.run_until_convergence(config, state, ufuncs)')
                 state = og_core.run_until_convergence(config, state, ufuncs)
-                print "One Experiment Done" , "gameOrders = " , gameOrders+1
-                all_experiments_history[ 'experiment' + str(gameOrders+1)] = state.history
+                print("One Experiment Done" , "gameOrders = " , gameOrders+1)
+                all_experiments_history[ 'experiment' + str(gameOrders+1)] = state.history[0:state.nextHistoryIndex,:,:]
             og_io.saveMatrix('uB' + str(upperBound) + '*uS' + str(config.uniqstrength) + 
                              '*initCount' + str(countInitials+21) + '.mat', all_experiments_history)
