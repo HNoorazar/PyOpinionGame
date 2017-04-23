@@ -120,7 +120,8 @@ def run_until_convergence(config, state, ufunc):
         iterCount += 1
         userTermination = ufunc.stop(config, state, delt, iterCount)
         
-        terminate = og_stop.polarizationStop(config, state, delt, iterCount) or userTermination
+        #terminate = og_stop.polarizationStop(config, state, delt, iterCount) or userTermination
+        terminate = userTermination
 
     state.history = np.delete(state.history, -1, axis=0)
     state.iterCount = iterCount
