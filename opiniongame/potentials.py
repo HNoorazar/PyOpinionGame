@@ -55,3 +55,13 @@ def gaussian(x):
     else:
         return 0.0
         
+
+def createBCM(center):
+    assert center >= 0.0 and center <= 1.0
+    def BCM(x):
+        if x >= 0 and x < center:
+            return 2.0 * x
+        else:
+            return 0
+    return BCM
+                        
