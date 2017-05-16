@@ -64,4 +64,14 @@ def createBCM(center):
         else:
             return 0
     return BCM
+
+
+def createBCMStraight(center):
+    assert center >= 0.0 and center <= 1.0
+    def BCMStraight(x):
+        if x >= 0 and x < center:
+            return 1.0/center
+        else:
+            return 0
+    return BCMStraight
                         
