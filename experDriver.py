@@ -40,30 +40,18 @@ communityPopSize    = 25
 config.popSize = numberOfCommunities * communityPopSize
 
 # List of upper bound probability of interaction between communities
-uppBound_list = np.array([.001, 0.004, 0.007, 0.01, 0.011, 0.012, 0.013, 0.014, 0.015, 0.016])
+uppBound_list = np.array([.012])
 
 #
 # List of uniqueness Strength parameter
 #
-a = np.arange(0.00001, 0.000251, 0.00003)
+individStrength = np.array([0])
 
-# part 0
-individStrength = a[0:1]
 
-# part 1
-individStrength = a[1:4]
-
-# part 2
-individStrength = a[4:5]
-
-# part 3
-individStrength = a[5:7]
-
-#individStrength = a[7:]
 
 config.learning_rate = 0.1
 tau = 0.62
-config.iterationMax = 12000
+config.iterationMax = 70000
 config.startingseed = 10
 config.printOut()
 #
@@ -99,10 +87,11 @@ for uniqForce in individStrength:
             print "countInitials=", countInitials + 1
             
             for gameOrders in noGames:
+                print "gameOrders=", gameOrders + 1
                 #cProfile.run('og_core.run_until_convergence(config, state, ufuncs)')
                 state = og_core.run_until_convergence(config, state, ufuncs)
                 state.history = state.history[0:state.nextHistoryIndex,:,:]
-                idx_IN_columns = [i for i in xrange(np.shape(state.history)[0]) if (i % config.popSize) == 0]
+                idx_IN_columns = [i for i in xrange(np.shape(state.history)[0]) if (i % (config.popSize)) == 0]
                 state.history = state.history[idx_IN_columns,:,:]
                 all_experiments_history[ 'experiment' + str(gameOrders+1)] = state.history
             og_io.saveMatrix('uB' + str(upperBound) + '*uS' + str(config.uniqstrength) + 

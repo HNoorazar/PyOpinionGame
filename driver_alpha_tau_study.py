@@ -25,6 +25,7 @@ cmdline.printOut()
 config = og_cfg.staticParameters()
 config.readFromFile('staticParameters.cfg')
 config.threshold = 0.01
+config.startingseed = 10
 config.printOut()
 
 #
@@ -50,10 +51,8 @@ resultMatrix = np.zeros((numalphas, numtaus, numvars))
 
 for (i, alpha) in enumerate(alpha_list):
     config.learning_rate = alpha
-    print("")
 
     for (j, tau) in enumerate(tau_list):
-        print((alpha, tau))
         #
         # functions for use by the simulation engine
         #

@@ -26,6 +26,7 @@ config = og_cfg.staticParameters()
 config.readFromFile('staticParameters.cfg')
 config.threshold = 0.0001
 config.Kthreshold = 0.00001
+config.startingsee = 20
 config.printOut()
 
 #
