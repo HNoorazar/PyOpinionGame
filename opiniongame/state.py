@@ -88,6 +88,9 @@ class WorldState:
     def currentOpinions(self):
         return self.history[self.nextHistoryIndex-1]
 
+    def previousOpinions(self):
+        return self.history[self.nextHistoryIndex-2]        
+
     def validate(self):
         # validation of data sizes
         print("WEIGHT SHAPE   : "+str(np.shape(self.couplingWeights)))

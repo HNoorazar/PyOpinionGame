@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.stats import skewnorm
 import opiniongame.stopping as og_stop
 
 def pick_topic(nTopics):
@@ -138,8 +139,7 @@ def findTendencies(config, state, players):
     """
     tendencies = np.zeros((2,1))
     # find current opinion
-    currentOpinions = np.copy(state.history[-1,:]).astype(float)
-    print "current= ", currentOpinions
+    currOpinions = state.currentOpinions()
 
     # find neighbors of players
     # returns a vector of size popSize where neighbors location is True, 
@@ -151,12 +151,12 @@ def findTendencies(config, state, players):
     hearerNeighbors = speakerNeighbors.reshape((len(hearerNeighbors),1))
     
     # pick up opinions of neighbors of players
-    speakNeOpinions = np.multiply(speakerNeighbors, currentOpinions)
-    speakerDistaces = -np.abs((currentOpinions[players[0]] * speakerNeighbors) - \
+    speakNeOpinions = np.multiply(speakerNeighbors, currOpinions)
+    speakerDistaces = -np.abs((currOpinions[players[0]] * speakerNeighbors) - \
                                                               speakNeOpinions)
 
-    hearNeOpinions = np.multiply(hearerNeighbors, currentOpinions)
-    hearerDistances = -np.abs((currentOpinions[players[1]] * hearerNeighbors ) - \
+    hearNeOpinions = np.multiply(hearerNeighbors, currOpinions)
+    hearerDistances = -np.abs((currOpinions[players[1]] * hearerNeighbors ) - \
                                                                hearNeOpinions)
 	
 	# Just pick up the d_ij's of neighbors. in above vectors there are some
@@ -176,17 +176,36 @@ def findTendencies(config, state, players):
 
     hearerVariance = (config.uniqstrength / (np.e - 1) ) * (-len(hearerDistances) + \
                                      np.sum(np.power(np.e, 1 + hearerDistances)))
-
-    # speaker uniqueness force
-    if speakerVariance == 0:
-        tendencies[0] = 0
+    if config.skewstrength == 0.0:
+        # speaker uniqueness force
+        if speakerVariance == 0:
+            tendencies[0] = 0
+        else:
+            tendencies[0] = np.random.normal(loc=0.0, scale=speakerVariance, size=None)
+        # hearer uniqueness force
+        if hearerVariance == 0:
+            tendencies[1] = 0
+        else:
+            tendencies[1] = np.random.normal(loc=0.0, scale=hearerVariance, size=None)
     else:
-        tendencies[0] = np.random.normal(loc=0.0, scale=speakerVariance, size=None)
-    # hearer uniqueness force
-    if hearerVariance == 0:
-        tendencies[1] = 0
-    else:
-        tendencies[1] = np.random.normal(loc=0.0, scale=hearerVariance, size=None)
+        prevOpinions = state.previousOpinions()
+        differenceOfOp = currOpinions - prevOpinions
+        if np.sum(differenceOfOp>0) >= config.popSize/2:
+            skewnessParameter = +abs(config.skewstrength)
+        else:
+            skewnessParameter = -abs(config.skewstrength)
+            
+        # speaker uniqueness force
+        if speakerVariance == 0:
+            tendencies[0] = 0
+        else:
+            tendencies[0] = skewnorm.rvs(skewnessParameter, loc = 0, scale = 1, size = None)/50.
+        # hearer uniqueness force
+        if hearerVariance == 0:
+            tendencies[1] = 0
+        else:
+            tendencies[1] = skewnorm.rvs(skewnessParameter, loc = 0, scale = 1, size = None)/50.
+    
     return tendencies
     
     

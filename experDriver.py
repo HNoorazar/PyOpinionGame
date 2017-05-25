@@ -45,13 +45,14 @@ uppBound_list = np.array([.012])
 #
 # List of uniqueness Strength parameter
 #
-individStrength = np.array([10])
+individStrength = np.array([0.00001])
 
 
-
+config.uniqstrength = 0.00001
 config.learning_rate = 0.1
 tau = 0.62
-config.iterationMax = 70000
+config.iterationMax = 30000
+config.skewstrength = 0.01
 config.printOut()
 #
 # functions for use by the simulation engine
@@ -86,7 +87,6 @@ for uniqForce in individStrength:
             print "countInitials=", countInitials + 1
             
             for gameOrders in noGames:
-                print "gameOrders=", gameOrders + 1
                 #cProfile.run('og_core.run_until_convergence(config, state, ufuncs)')
                 state = og_core.run_until_convergence(config, state, ufuncs)
                 state.history = state.history[0:state.nextHistoryIndex,:,:]
