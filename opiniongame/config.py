@@ -38,6 +38,7 @@ class staticParameters:
         """
         self.learning_rate = .1
         self.uniqstrength = 0.
+        self.skewStrength = 0.
         self.no_of_experiments = 100
         self.popSize = 20
         self.threshold = .000001
@@ -52,7 +53,8 @@ class staticParameters:
         print("StaticParameters:")
         print("=================")
         print("Learning rate     = "+str(self.learning_rate))
-        print("Unique. strength  = "+str(self.uniqstrength))        
+        print("Unique. strength  = "+str(self.uniqstrength))
+        print("Skew. strength  = " + str(self.skewStrength))        
         print("NumExperiments    = "+str(self.no_of_experiments))
         print("PopSize           = "+str(self.popSize))
         print("Threshold         = "+str(self.threshold))
@@ -69,6 +71,7 @@ class staticParameters:
         config.add_section('parameters')
         config.set('parameters', 'learning_rate', self.learning_rate)
         config.set('parameters', 'uniqstrength', self.uniqstrength)
+        config.set('parameters', 'skewStrength', self.skewStrength)
         config.set('parameters', 'threshold', self.threshold)
         config.set('parameters', 'Hthreshold', self.Hthreshold)
         config.set('parameters', 'Kthreshold', self.Kthreshold)
@@ -86,7 +89,8 @@ class staticParameters:
         config = configparser.RawConfigParser()
         config.read(fname)
         self.learning_rate = config.getfloat('parameters', 'learning_rate')
-        self.uniqstrength = config.getfloat('parameters', 'uniqstrength')        
+        self.uniqstrength = config.getfloat('parameters', 'uniqstrength')
+        self.skewStrength = config.getfloat('parameters', 'skewStrength')        
         self.threshold = config.getfloat('parameters', 'threshold')
         self.Hthreshold = config.getfloat('parameters', 'Hthreshold')
         self.Kthreshold = config.getfloat('parameters', 'Kthreshold')
@@ -95,3 +99,4 @@ class staticParameters:
         self.no_of_experiments = config.getint('parameters', 'no_of_experiments')
         self.startingseed = config.getint('parameters', 'startingseed')
         self.iterationMax = config.getint('parameters', 'iterationMax')
+        

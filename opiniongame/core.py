@@ -139,6 +139,7 @@ def findTendencies(config, state, players):
     tendencies = np.zeros((2,1))
     # find current opinion
     currentOpinions = np.copy(state.history[-1,:]).astype(float)
+    print "current= ", currentOpinions
 
     # find neighbors of players
     # returns a vector of size popSize where neighbors location is True, 

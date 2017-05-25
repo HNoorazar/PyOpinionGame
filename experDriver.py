@@ -45,14 +45,13 @@ uppBound_list = np.array([.012])
 #
 # List of uniqueness Strength parameter
 #
-individStrength = np.array([0])
+individStrength = np.array([10])
 
 
 
 config.learning_rate = 0.1
 tau = 0.62
 config.iterationMax = 70000
-config.startingseed = 10
 config.printOut()
 #
 # functions for use by the simulation engine
