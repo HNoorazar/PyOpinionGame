@@ -176,6 +176,7 @@ def findTendencies(config, state, players):
 
     hearerVariance = (config.uniqstrength / (np.e - 1) ) * (-len(hearerDistances) + \
                                      np.sum(np.power(np.e, 1 + hearerDistances)))
+
     if config.skewstrength == 0.0:
         # speaker uniqueness force
         if speakerVariance == 0:
@@ -190,10 +191,16 @@ def findTendencies(config, state, players):
     else:
         prevOpinions = state.previousOpinions()
         differenceOfOp = currOpinions - prevOpinions
-        if np.sum(differenceOfOp>0) >= config.popSize/2:
-            skewnessParameter = +abs(config.skewstrength)
+        
+        # see if more than 70% of population is going up or not
+        if np.sum(differenceOfOp>0) >= ( config.popSize * .7 ):
+            skewnessParameter = - abs(config.skewstrength)
+        # see if more than 70% of population is going down or not    
+        elif np.sum(differenceOfOp>0) <= ( config.popSize * .7 ):
+            skewnessParameter = + abs(config.skewstrength)
         else:
-            skewnessParameter = -abs(config.skewstrength)
+        # The case in which 70% of population neither goes up nor goes down.
+            skewnessParameter = 0.0
             
         # speaker uniqueness force
         if speakerVariance == 0:
