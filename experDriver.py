@@ -40,7 +40,7 @@ communityPopSize    = 25
 config.popSize = numberOfCommunities * communityPopSize
 
 # List of upper bound probability of interaction between communities
-uppBound_list = np.array([.012])
+uppBound_list = np.array([.001])
 
 #
 # List of uniqueness Strength parameter
@@ -50,7 +50,7 @@ individStrength = np.array([0.0001])
 config.learning_rate = 0.1
 tau = 0.62
 config.iterationMax = 30000
-config.skewstrength = 2.0
+config.skewstrength = 10.0
 config.printOut()
 #
 # functions for use by the simulation engine
