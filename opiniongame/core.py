@@ -207,7 +207,6 @@ def findTendencies(config, state, players):
         # see if more than 70% of opinion-neighbors is going up or not
         if np.sum(differenceOfOp>0) >= ( np.size(speakersOpNeighbor,0) * .1 ):
             skewnessParameter = - abs(config.skewstrength)
-        
         # see if more than 70% of population is going down or not    
         elif np.sum(differenceOfOp<0) >= ( np.size(speakersOpNeighbor,0) * .1 ):
             skewnessParameter = + abs(config.skewstrength)
