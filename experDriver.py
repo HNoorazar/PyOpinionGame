@@ -48,7 +48,7 @@ uppBound_list = np.array([.012])
 individStrength = np.array([0.00001])
 
 
-config.uniqstrength = 0.00001
+config.uniqstrength = .001
 config.learning_rate = 0.1
 tau = 0.62
 config.iterationMax = 30000

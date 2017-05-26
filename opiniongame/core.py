@@ -190,7 +190,11 @@ def findTendencies(config, state, players):
             tendencies[1] = np.random.normal(loc=0.0, scale=hearerVariance, size=None)
     
     else:
-        prevOpinions = state.previousOpinions()
+        if state.nextHistoryIndex < config.popSize:
+            prevOpinions = state.history[state.nextHistoryIndex-2]
+        else:
+            prevOpinions = state.history[state.nextHistoryIndex - config.popSize]
+
         " Take care of Speaker first. "
         currOpOfSpeak = currOpinions[players[0]]
         
@@ -201,21 +205,22 @@ def findTendencies(config, state, players):
         differenceOfOp = currOpinions[speakersOpNeighbor] - prevOpinions[speakersOpNeighbor]
         
         # see if more than 70% of opinion-neighbors is going up or not
-        if np.sum(differenceOfOp>0) >= ( np.size(speakersOpNeighbor,0) * .7 ):
+        if np.sum(differenceOfOp>0) >= ( np.size(speakersOpNeighbor,0) * .1 ):
             skewnessParameter = - abs(config.skewstrength)
+        
         # see if more than 70% of population is going down or not    
-        elif np.sum(differenceOfOp>0) <= ( np.size(speakersOpNeighbor,0) * .7 ):
+        elif np.sum(differenceOfOp<0) >= ( np.size(speakersOpNeighbor,0) * .1 ):
             skewnessParameter = + abs(config.skewstrength)
         else:
         # The case in which 70% of opinion-neighbors neither goes up nor goes down.
             skewnessParameter = 0.0
 
-        # speaker uniqueness force
+        # determine speaker uniqueness force
         if speakerVariance == 0:
             tendencies[0] = 0
         else:
             tendencies[0] = skewnorm.rvs(skewnessParameter, loc = 0, scale = speakerVariance, size = None)
-
+#            print tendencies[0]
         " Take care of Hearer."
         currOpOfHear = currOpinions[players[1]]
         
@@ -226,16 +231,17 @@ def findTendencies(config, state, players):
         differenceOfOp = currOpinions[herarerOpNeighbor] - prevOpinions[herarerOpNeighbor]
         
         # see if more than 70% of opinion-neighbors is going up or not
-        if np.sum(differenceOfOp>0) >= ( np.size(herarerOpNeighbor,0) * .7 ):
+        if np.sum(differenceOfOp>0) >= ( np.size(herarerOpNeighbor,0) * .1 ):
             skewnessParameter = - abs(config.skewstrength)
+        
         # see if more than 70% of population is going down or not    
-        elif np.sum(differenceOfOp>0) <= ( np.size(herarerOpNeighbor,0) * .7 ):
+        elif np.sum(differenceOfOp<0) >= ( np.size(herarerOpNeighbor,0) * .1 ):
             skewnessParameter = + abs(config.skewstrength)
         else:
         # The case in which 70% of opinion-neighbors neither goes up nor goes down.
             skewnessParameter = 0.0
 
-        # hearer uniqueness force
+        # determine hearer uniqueness force
         if hearerVariance == 0:
             tendencies[1] = 0
         else:
