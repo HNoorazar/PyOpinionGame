@@ -205,11 +205,11 @@ def findTendencies(config, state, players):
         differenceOfOp = currOpinions[speakersOpNeighbor] - prevOpinions[speakersOpNeighbor]
         
         # see if more than 70% of opinion-neighbors is going up or not
-        if np.sum(differenceOfOp>0) >= ( np.size(speakersOpNeighbor,0) * .1 ):
+        if np.sum(differenceOfOp>0) >= ( np.size(speakersOpNeighbor,0) * .6):
             skewnessParameter = - abs(config.skewstrength)
         # see if more than 70% of population is going down or not    
-        elif np.sum(differenceOfOp<0) >= ( np.size(speakersOpNeighbor,0) * .1 ):
-            skewnessParameter = + abs(config.skewstrength)
+        elif np.sum(differenceOfOp<0) >= ( np.size(speakersOpNeighbor,0) * .6):
+            skewnessParameter = + abs(config.skewstrength)            
         else:
         # The case in which 70% of opinion-neighbors neither goes up nor goes down.
             skewnessParameter = 0.0
@@ -230,11 +230,11 @@ def findTendencies(config, state, players):
         differenceOfOp = currOpinions[herarerOpNeighbor] - prevOpinions[herarerOpNeighbor]
         
         # see if more than 70% of opinion-neighbors is going up or not
-        if np.sum(differenceOfOp>0) >= ( np.size(herarerOpNeighbor,0) * .1 ):
+        if np.sum(differenceOfOp>0) >= ( np.size(herarerOpNeighbor,0) * .6):
             skewnessParameter = - abs(config.skewstrength)
         
         # see if more than 70% of population is going down or not    
-        elif np.sum(differenceOfOp<0) >= ( np.size(herarerOpNeighbor,0) * .1 ):
+        elif np.sum(differenceOfOp<0) >= ( np.size(herarerOpNeighbor,0) * .6):
             skewnessParameter = + abs(config.skewstrength)
         else:
         # The case in which 70% of opinion-neighbors neither goes up nor goes down.
