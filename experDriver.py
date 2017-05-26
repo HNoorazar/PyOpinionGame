@@ -52,7 +52,7 @@ config.uniqstrength = 0.00001
 config.learning_rate = 0.1
 tau = 0.62
 config.iterationMax = 30000
-config.skewstrength = 0.01
+config.skewstrength = 2.0
 config.printOut()
 #
 # functions for use by the simulation engine
