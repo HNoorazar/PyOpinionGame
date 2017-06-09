@@ -182,12 +182,12 @@ def findTendencies(config, state, players):
         if speakerVariance == 0:
             tendencies[0] = 0
         else:
-            tendencies[0] = np.random.normal(loc=0.0, scale=speakerVariance, size=None)
+            tendencies[0] = skewnorm.rvs(0.0, loc = 0.0, scale = speakerVariance, size = None)
         # hearer uniqueness force
         if hearerVariance == 0:
             tendencies[1] = 0
         else:
-            tendencies[1] = np.random.normal(loc=0.0, scale=hearerVariance, size=None)
+            tendencies[1] = skewnorm.rvs(0.0, loc = 0.0, scale = hearerVariance, size = None)
     
     else:
         if state.nextHistoryIndex < config.popSize:
@@ -214,7 +214,7 @@ def findTendencies(config, state, players):
         if speakerVariance == 0:
             tendencies[0] = 0
         else:
-            tendencies[0] = skewnorm.rvs(skewnessParameter, loc = 0, scale = speakerVariance, size = None)
+            tendencies[0] = skewnorm.rvs(skewnessParameter, loc = 0.0, scale = speakerVariance, size = None)
 
         " Take care of Hearer."
         currOpOfHear = currOpinions[players[1]]
@@ -234,7 +234,7 @@ def findTendencies(config, state, players):
         if hearerVariance == 0:
             tendencies[1] = 0
         else:
-            tendencies[1] = skewnorm.rvs(skewnessParameter, loc = 0, scale = hearerVariance, size = None)
+            tendencies[1] = skewnorm.rvs(skewnessParameter, loc = 0.0, scale = hearerVariance, size = None)
     
     return tendencies
     
