@@ -173,6 +173,7 @@ def findTendencies(config, state, players):
 
     speakerVariance = (config.uniqstrength / (np.e - 1) ) * (-len(speakerDistaces) + \
                                       np.sum(np.power(np.e, 1 + speakerDistaces)))                                    
+
     hearerVariance = (config.uniqstrength / (np.e - 1) ) * (-len(hearerDistances) + \
                                      np.sum(np.power(np.e, 1 + hearerDistances)))              
 
