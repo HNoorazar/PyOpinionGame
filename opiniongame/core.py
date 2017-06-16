@@ -148,7 +148,7 @@ def findTendencies(config, state, players):
     speakerNeighbors = speakerNeighbors.reshape((len(speakerNeighbors),1))
 
     hearerNeighbors =  state.adj[players[1],:] > 0.
-    hearerNeighbors = speakerNeighbors.reshape((len(hearerNeighbors),1))
+    hearerNeighbors =  hearerNeighbors.reshape((len(hearerNeighbors),1))
     
     # pick up opinions of neighbors of players
     speakNeOpinions = np.multiply(speakerNeighbors, currOpinions)
@@ -169,13 +169,13 @@ def findTendencies(config, state, players):
     speakerDistaces = speakerDistaces.reshape((len(speakerDistaces),1))
 
     hearerDistances = hearerDistances[hearerNeighbors]
-    hearerDistances = speakerDistaces.reshape((len(hearerDistances),1))
+    hearerDistances = hearerDistances.reshape((len(hearerDistances),1))
 
     speakerVariance = (config.uniqstrength / (np.e - 1) ) * (-len(speakerDistaces) + \
-                                      np.sum(np.power(np.e, 1 + speakerDistaces)))
-
+                                      np.sum(np.power(np.e, 1 + speakerDistaces)))                                    
     hearerVariance = (config.uniqstrength / (np.e - 1) ) * (-len(hearerDistances) + \
-                                     np.sum(np.power(np.e, 1 + hearerDistances)))
+                                     np.sum(np.power(np.e, 1 + hearerDistances)))              
+
 
     if config.skewstrength == 0.0:
         # speaker uniqueness force

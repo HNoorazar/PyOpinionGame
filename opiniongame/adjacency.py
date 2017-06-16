@@ -148,3 +148,35 @@ def CommunitiesMatrix( popSize , comNo , upperBound):
         comNo communities of popSize individuals each 
     """
     return MakeBistochastic( MakeBigMatrix(popSize, comNo, upperBound))
+
+
+
+##########################################################################################
+###################                                             ##########################
+################### Symmetric Doubly Stochastic adjacency       ##########################
+################### with equal probabilities of interaction     ##########################
+
+
+def MakeCommunityAdj(noCommunity, subPop, uppBound):
+    " think about writing this in a clever way! leave it as brute force for now"
+    " we are looking at just three communities"
+    
+    totoalPopulation = noCommunity * subPop
+    deterministicAdj = np.zeros((totoalPopulation, totoalPopulation))
+    diagonalBlock = np.ones((subPop, subPop)) * (1. / (subPop -1) ) - (1. / (subPop -1) ) *  np.identity(subPop)
+    offDiagonalB = uppBound * np.ones((subPop, subPop))
+
+    deterministicAdj[0:subPop, 0:subPop] = diagonalBlock
+    deterministicAdj[subPop:2*subPop, 0:subPop] = offDiagonalB
+    deterministicAdj[2*subPop: 3*subPop, 0:subPop] = offDiagonalB
+    
+    deterministicAdj[subPop:2*subPop, subPop: 2*subPop] = diagonalBlock
+    deterministicAdj[0:subPop, subPop: 2*subPop] = offDiagonalB
+    deterministicAdj[2*subPop:3*subPop, subPop: 2*subPop] = offDiagonalB
+    
+    deterministicAdj[2*subPop:3*subPop, 2*subPop:3*subPop] = diagonalBlock
+    deterministicAdj[0:subPop , 2*subPop:3*subPop] = offDiagonalB
+    deterministicAdj[subPop:2*subPop , 2*subPop:3*subPop] = offDiagonalB
+    
+    deterministicAdj = deterministicAdj / deterministicAdj[0,:].sum()
+    return deterministicAdj
