@@ -157,7 +157,7 @@ def CommunitiesMatrix( popSize , comNo , upperBound):
 ################### with equal probabilities of interaction     ##########################
 
 
-def MakeCommunityAdj(noCommunity, subPop, uppBound):
+def MakeCommunityAdjDet(noCommunity, subPop, uppBound):
     " think about writing this in a clever way! leave it as brute force for now"
     " we are looking at just three communities"
     
