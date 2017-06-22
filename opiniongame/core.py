@@ -204,9 +204,9 @@ def findTendencies(config, state, players):
         
         # difference between current and previous opinion of speaker's  opinion-neighbor.
         differenceOfOp = currOpinions[speakersOpNeighbor] - prevOpinions[speakersOpNeighbor]
-        direction = np.sum(differenceOfOp)
-        
+        direction = np.sum(differenceOfOp>0) - np.sum(differenceOfOp<0)
         if direction != 0 :
+            direction = np.sign(direction)
             skewnessParameter = - direction * abs(config.skewstrength)
         else:
             skewnessParameter = 0.0
@@ -224,9 +224,9 @@ def findTendencies(config, state, players):
         
         # difference between current and previous opinion of hearer's  opinion-neighbor.
         differenceOfOp = currOpinions[herarerOpNeighbor] - prevOpinions[herarerOpNeighbor]
-        direction = np.sum(differenceOfOp);
-        
+        direction = np.sum(differenceOfOp>0) - np.sum(differenceOfOp<0)    
         if direction !=0 :
+            direction = np.sign(direction)
             skewnessParameter = - direction * abs(config.skewstrength)
         else:
             skewnessParameter = 0.0
