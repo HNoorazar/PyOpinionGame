@@ -99,7 +99,10 @@ ENV/
 
 # Simulink Code Generation
 slprj/
+<<<<<<< HEAD
 
 # MATLAB files
 .mat
 *.mat
+=======
+>>>>>>> upstream/master

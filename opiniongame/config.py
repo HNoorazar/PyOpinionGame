@@ -38,7 +38,10 @@ class staticParameters:
         """
         self.learning_rate = .1
         self.uniqstrength = 0.
+<<<<<<< HEAD
         self.skewStrength = 0.
+=======
+>>>>>>> upstream/master
         self.no_of_experiments = 100
         self.popSize = 20
         self.threshold = .000001
@@ -53,8 +56,12 @@ class staticParameters:
         print("StaticParameters:")
         print("=================")
         print("Learning rate     = "+str(self.learning_rate))
+<<<<<<< HEAD
         print("Unique. strength  = "+str(self.uniqstrength))
         print("Skew. strength  = " + str(self.skewstrength))        
+=======
+        print("Unique. strength  = "+str(self.uniqstrength))        
+>>>>>>> upstream/master
         print("NumExperiments    = "+str(self.no_of_experiments))
         print("PopSize           = "+str(self.popSize))
         print("Threshold         = "+str(self.threshold))
@@ -71,7 +78,10 @@ class staticParameters:
         config.add_section('parameters')
         config.set('parameters', 'learning_rate', self.learning_rate)
         config.set('parameters', 'uniqstrength', self.uniqstrength)
+<<<<<<< HEAD
         config.set('parameters', 'skewstrength', self.skewstrength)
+=======
+>>>>>>> upstream/master
         config.set('parameters', 'threshold', self.threshold)
         config.set('parameters', 'Hthreshold', self.Hthreshold)
         config.set('parameters', 'Kthreshold', self.Kthreshold)
@@ -81,7 +91,11 @@ class staticParameters:
         config.set('parameters', 'startingseed', self.startingseed)
         config.set('parameters', 'iterationMax', self.iterationMax)
 
+<<<<<<< HEAD
         # Writing our configuration file to 'fname.cfg'
+=======
+
+>>>>>>> upstream/master
         with open(fname, 'wb') as configfile:
             config.write(configfile)
 
@@ -89,8 +103,12 @@ class staticParameters:
         config = configparser.RawConfigParser()
         config.read(fname)
         self.learning_rate = config.getfloat('parameters', 'learning_rate')
+<<<<<<< HEAD
         self.uniqstrength = config.getfloat('parameters', 'uniqstrength')
         self.skewstrength = config.getfloat('parameters', 'skewstrength')        
+=======
+        self.uniqstrength = config.getfloat('parameters', 'uniqstrength')        
+>>>>>>> upstream/master
         self.threshold = config.getfloat('parameters', 'threshold')
         self.Hthreshold = config.getfloat('parameters', 'Hthreshold')
         self.Kthreshold = config.getfloat('parameters', 'Kthreshold')
@@ -98,5 +116,9 @@ class staticParameters:
         self.popSize = config.getint('parameters', 'popSize')
         self.no_of_experiments = config.getint('parameters', 'no_of_experiments')
         self.startingseed = config.getint('parameters', 'startingseed')
+<<<<<<< HEAD
         self.iterationMax = config.getint('parameters', 'iterationMax')
         
+=======
+        self.iterationMax = config.getint('parameters', 'iterationMax')
+>>>>>>> upstream/master
