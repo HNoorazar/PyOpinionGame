@@ -81,7 +81,7 @@ class staticParameters:
         config.set('parameters', 'startingseed', self.startingseed)
         config.set('parameters', 'iterationMax', self.iterationMax)
 
-
+        # Writing our configuration file to 'fname.cfg'
         with open(fname, 'wb') as configfile:
             config.write(configfile)
 
