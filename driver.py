@@ -53,3 +53,8 @@ state = og_core.run_until_convergence(config, state, ufuncs)
 rdict = {}
 rdict['history'] = state.history
 og_io.saveMatrix('output.mat', rdict)
+
+
+
+
+
