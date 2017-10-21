@@ -97,12 +97,9 @@ ENV/
 # Compiled MEX binaries (all platforms)
 *.mex*
 
-# Simulink Code Generation
-slprj/
-<<<<<<< HEAD
+# Simulink Code Generation slprj/
 
 # MATLAB files
 .mat
 *.mat
 =======
->>>>>>> upstream/master
