@@ -87,12 +87,9 @@ class WorldState:
 
     def currentOpinions(self):
         return self.history[self.nextHistoryIndex-1]
-<<<<<<< HEAD
 
 #    def previousOpinions(self):
 #        return self.history[self.nextHistoryIndex-2]        
-=======
->>>>>>> upstream/master
 
     def validate(self):
         # validation of data sizes
