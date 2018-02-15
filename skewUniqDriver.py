@@ -62,7 +62,7 @@ ufuncs = og_cfg.UserFunctions(og_select.PickTwoWeighted,
                               og_pot.createTent(tau))
                               
 noInitials = np.arange(1) # Number of different initial opinions.
-noGames = np.arange(75)    # Number of different game orders.
+noGames = np.arange(1)    # Number of different game orders.
 # Run experiments with different adjacencies, different initials, and different order of games.
 for uniqForce in individStrength:
     config.uniqstrength = uniqForce

@@ -106,12 +106,10 @@ def run_until_convergence(config, state, ufunc):
     state.initializeHistory()
     iterCount = 0
     terminate = False
-
     while not terminate:
         # take one step to produce the new set of opinions, change observed during the
         # step and pairs that interacted.
         (newOpinions, change, all_pairs) = one_step(config, state, ufunc)
-
         # compute change as the absolute change from the most recent step and
         # the previous.  IGNORE the change returned by one_step
         delt = np.sum(np.abs(state.history[-1]-state.history[-2]))

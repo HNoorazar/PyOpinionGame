@@ -84,13 +84,13 @@ for uniqForce in individStrength:
    
             state.couplingWeights = og_coupling.weights_no_coupling(config.popSize, config.ntopics)
             all_experiments_history = {}
-            print("(uniqForce, upperBound)  =(", uniqForce, "," , upperBound , ")")
-            print("countInitials=", countInitials + 1)
+            print '(uniqForce, upperBound) = (', uniqForce, ',' , upperBound , ")"
+            print 'countInitials=', countInitials + 1
             
             for gameOrders in noGames:
                 #cProfile.run('og_core.run_until_convergence(config, state, ufuncs)')
                 state = og_core.run_until_convergence(config, state, ufuncs)
-                print("One Experiment Done" , "gameOrders = " , gameOrders+1)
+                print "One Experiment Done" , ',', "gameOrders = " , gameOrders+1
                 all_experiments_history[ 'experiment' + str(gameOrders+1)] = state.history[0:state.nextHistoryIndex,:,:]
             og_io.saveMatrix('uB' + str(upperBound) + '*uS' + str(config.uniqstrength) + 
                              '*initCount' + str(countInitials+21) + '.mat', all_experiments_history)
