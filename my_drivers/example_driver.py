@@ -27,8 +27,6 @@ config.readFromFile('staticParameters.cfg')
 config.threshold = 0.0001
 config.Kthreshold = 0.00001
 config.startingseed = 20
-config.learning_rate = 0.1
-tau = 0.62
 config.printOut()
 
 #
@@ -43,6 +41,10 @@ state = og_state.WorldState.fromCmdlineArguments(cmdline, config)
 #
 # run
 #
+
+config.learning_rate = 0.1
+tau = 0.62
+
 ufuncs = og_cfg.UserFunctions(og_select.FastPairSelection,
                               og_stop.iterationStop,
                               og_pot.createTent(tau))

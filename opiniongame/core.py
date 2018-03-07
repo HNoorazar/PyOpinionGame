@@ -121,9 +121,10 @@ def run_until_convergence(config, state, ufunc):
         
         #terminate = og_stop.polarizationStop(config, state, delt, iterCount) or userTermination
         terminate = userTermination
-
+    state.history = state.history[:state.nextHistoryIndex,:,:]
     state.history = np.delete(state.history, -1, axis=0)
     state.iterCount = iterCount
+    print 
     return state
 #
 # This function finds uniqueness tendency of two players.
@@ -198,7 +199,7 @@ def findTendencies(config, state, players):
         currOpOfSpeak = currOpinions[players[0]]
         
         # index of opinion-neighbors of speaker.
-        speakersOpNeighbor = np.where(np.logical_and(currOpinions>= currOpOfSpeak-0.05, currOpinions<=currOpOfSpeak+0.05))
+        speakersOpNeighbor = np.where(np.logical_and(currOpinions>=currOpOfSpeak-0.05, currOpinions<=currOpOfSpeak+0.05))
         
         # difference between current and previous opinion of speaker's  opinion-neighbor.
         differenceOfOp = currOpinions[speakersOpNeighbor] - prevOpinions[speakersOpNeighbor]
