@@ -22,7 +22,7 @@ def iterationStop(config, state, change, iterationNo):
     Iteration count stop function, would terminate the process if
     a certain number of steps is taken.
     """
-    if iterationNo >= config.iterationmax:
+    if iterationNo >= config.iterationMax:
         return True
     else:
         return False
