@@ -46,7 +46,7 @@ class staticParameters:
         self.Kthreshold = .000001 * self.popSize
         self.ntopics = 1
         self.startingseed = 10
-        self.iterationMax = 100
+        self.iterationmax = 100
 
     def printOut(self):
         print("=================")
@@ -60,9 +60,9 @@ class staticParameters:
         print("Threshold         = "+str(self.threshold))
         print("Hthreshold        = "+str(self.Hthreshold))
         print("Kthreshold        = "+str(self.Kthreshold))
-        print("NTopics           = "+str(self.ntopics))
+        print("ntopics           = "+str(self.ntopics))
         print("startingSeed      = "+str(self.startingseed))
-        print("iterationMax      = "+str(self.iterationMax))
+        print("iterationmax      = "+str(self.iterationmax))
         print("")
 
     def writeToFile(self, fname):
@@ -79,7 +79,7 @@ class staticParameters:
         config.set('parameters', 'popSize', self.popSize)
         config.set('parameters', 'no_of_experiments', self.no_of_experiments)
         config.set('parameters', 'startingseed', self.startingseed)
-        config.set('parameters', 'iterationMax', self.iterationMax)
+        config.set('parameters', 'iterationmax', self.iterationmax)
 
 
         with open(fname, 'wb') as configfile:
@@ -98,7 +98,7 @@ class staticParameters:
         self.popSize = config.getint('parameters', 'popSize')
         self.no_of_experiments = config.getint('parameters', 'no_of_experiments')
         self.startingseed = config.getint('parameters', 'startingseed')
-        self.iterationMax = config.getint('parameters', 'iterationMax')
+        self.iterationmax = config.getint('parameters', 'iterationmax')
 
 
 
