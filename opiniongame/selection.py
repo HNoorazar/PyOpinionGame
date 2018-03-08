@@ -125,7 +125,8 @@ def PickTwoWeighted(weightedAdj):
  will be developed later for other adjacencies!!!
 """
 ##############
-##############  ************    incomplete    **************
+############## This function is written for future work.
+############## It may need a little bit of attention to details.
 ############## 
 def pickMaxPlayersWeightedAdj(weightedAdjacency):
     pop_size = int(np.shape(weightedAdjacency)[1])
