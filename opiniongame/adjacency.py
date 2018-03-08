@@ -74,8 +74,6 @@ def generateGridAdj(pop_size):
 ###################                          ###############################
 
 ### The following will test convergence! 
-### however I do not know what kind of test it is! 
-### I am just writting (trying to write) Matt's code here!
 def convergedTestBio(matrix):
     localMatrix = np.copy(matrix).astype(float);
     e1 = sum(abs(np.sum(localMatrix , axis = 0) - 1));
