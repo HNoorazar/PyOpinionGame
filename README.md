@@ -1,4 +1,5 @@
 # PyOpinionGame
+![alt text](https://github.com/HNoorazar/PyOpinionGame/blob/master/opGameWorld.jpeg)
 
 This repository contains code to accompany the following papers:
 
