@@ -73,7 +73,7 @@ def generateGridAdj(pop_size):
 ################### Make Bistochastic Matrix ###############################
 ###################                          ###############################
 
-### The following will test convergence! 
+### The following will test convergence!
 def convergedTestBio(matrix):
     localMatrix = np.copy(matrix).astype(float);
     e1 = sum(abs(np.sum(localMatrix , axis = 0) - 1));
@@ -137,7 +137,9 @@ def MakeBigMatrix(n, p, ubound):
                 # Here we take care of interactions between different
                 # communities. The counting purposes are done for
                 # lower part of bigMatrix.
-                BigMatrix[rowStart:rowEnd, colStart:colEnd] = np.random.uniform(low = 0.0, high = ubound, size = (n, n));
+                BigMatrix[rowStart:rowEnd, colStart:colEnd] = np.random.uniform(low = 0.0, 
+                                                                                high = ubound, 
+                                                                                size = (n, n));
                 BigMatrix[colStart:colEnd, rowStart:rowEnd] = BigMatrix[rowStart:rowEnd, colStart:colEnd]
     return BigMatrix
     
@@ -149,10 +151,10 @@ def CommunitiesMatrix( popSize , comNo , upperBound):
 
 
 
-##########################################################################################
-###################                                             ##########################
-################### Symmetric Doubly Stochastic adjacency       ##########################
-################### with equal probabilities of interaction     ##########################
+#################################################################################
+#############                                          ##########################
+############# Symmetric Doubly Stochastic adjacency    ##########################
+############# with equal probabilities of interaction  ##########################
 
 
 def MakeCommunityAdjDet(noCommunity, subPop, uppBound):
@@ -161,7 +163,8 @@ def MakeCommunityAdjDet(noCommunity, subPop, uppBound):
     
     totoalPopulation = noCommunity * subPop
     deterministicAdj = np.zeros((totoalPopulation, totoalPopulation))
-    diagonalBlock = np.ones((subPop, subPop)) * (1. / (subPop -1) ) - (1. / (subPop -1) ) *  np.identity(subPop)
+    diagonalBlock = np.ones((subPop, subPop)) * (1. / (subPop -1) ) - 
+                    (1. / (subPop -1) ) *  np.identity(subPop)
     offDiagonalB = uppBound * np.ones((subPop, subPop))
 
     deterministicAdj[0:subPop, 0:subPop] = diagonalBlock
@@ -178,3 +181,4 @@ def MakeCommunityAdjDet(noCommunity, subPop, uppBound):
     
     deterministicAdj = deterministicAdj / deterministicAdj[0,:].sum()
     return deterministicAdj
+

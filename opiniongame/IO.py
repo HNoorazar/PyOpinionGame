@@ -1,4 +1,6 @@
 import scipy.io as sio
+import numpy as np
+import h5py
 
 def loadNamedMatrix(filename, name):
     """
@@ -22,3 +24,19 @@ def saveMatrix(filename, matDict):
         sio.savemat(filename, matDict)
     except:
         print("ERROR: could not write matrix file "+filename)
+
+
+def saveMatrixH5(filename, history, config, state):
+    try:
+        hf = h5py.File('data.hdf5', 'w')
+        hf.create_dataset(filename, data=fDict)
+
+        """
+         We could also do:
+            with h5py.File("mytestfile.hdf5", "w") as f:
+            dset = f.create_dataset("mydataset", (100,), dtype='i')
+        """
+        hf.close()
+    except:
+        print("ERROR: could not write matrix file "+filename)
+
